@@ -1,3 +1,4 @@
 
 # keep Google verification file byte-exact
 google*.html -text
+google*.txt -text
