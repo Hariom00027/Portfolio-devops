@@ -91,6 +91,10 @@
 <link rel="stylesheet" href="/styles.css">
 </head>
 <body class="loading">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-gh" viewBox="0 0 16 16"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></symbol>
+  <symbol id="i-ext" viewBox="0 0 16 16"><path d="M9 2h5v5M14 2L7 9M12 9.5V14H2V4h4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+</svg>
 
 <!-- Boot sequence -->
 <div id="boot">
@@ -167,7 +171,7 @@
   <div class="container dash-wrap">
     <div class="dash-head reveal">
       <div>
-        <div class="sec-tag">01 · kubectl get infra -o wide</div>
+        <div class="dash-tagrow"><div class="sec-tag">01 · kubectl get infra -o wide</div><a class="pill-link" href="/saarthix-case-study"><span aria-hidden="true">📄</span> How I built this: read the case study <i aria-hidden="true">→</i></a></div>
         <h2 class="sec-title">Inside the hosting stack.</h2>
       </div>
       <p class="dash-how"><b class="c-pink">① Pick an action</b> <span>→</span> <b class="c-cyan">② watch the live map</b> <span>→</span> <b class="c-green">③ read the response</b></p>
@@ -218,7 +222,6 @@
         </div>
       </div>
     </div>
-    <p class="cs-link reveal">→ Read the full write-up: <a href="/saarthix-case-study">How I hosted the Saarthix platform solo at minimal cost (DevOps case study)</a></p>
   </div>
 </section>
 
@@ -248,8 +251,7 @@
     <div class="cost-grid">
       <div class="glass cost-chart reveal">
         <div class="bars" id="bars"></div>
-        <div class="legend"><span class="lb">typical managed setup</span><span class="la">my architecture</span></div>
-        <p class="legend-note">Illustrative relative comparison, not billed figures.</p>
+        <div class="legend"><span class="lb">typical managed setup</span><span class="la">my architecture</span><em class="legend-tag" title="Relative comparison, not billed figures">illustrative</em></div>
       </div>
       <div class="cost-side">
         <div class="glass saving neon reveal d1">
@@ -334,24 +336,147 @@
 <section id="projects">
   <div class="container">
     <div class="sec-tag reveal">06 · ls ~/projects</div>
-    <h2 class="sec-title reveal d1">DevOps projects.</h2>
-    <p class="sec-sub reveal d2">The real work behind this DevOps portfolio, with a write-up or the source for each.</p>
-    <div class="proj-grid">
-      <article class="glass proj reveal tilt">
-        <div class="proj-tag">PRODUCTION · SAARTHIX</div>
+    <h2 class="sec-title reveal d1">DevOps &amp; engineering projects.</h2>
+    <p class="sec-sub reveal d2">Production infrastructure first, then the apps, models and sites I've built along the way. Every project links to its write-up, its source or a live demo.</p>
+
+    <!-- featured -->
+    <article class="glass neon pfeat reveal" data-cat="devops">
+      <div class="pfeat-body">
+        <div class="pf-kicker"><span class="pf-star">★</span> FEATURED · IN PRODUCTION</div>
         <h3>Saarthix platform hosting</h3>
-        <p>Designed and run the hosting for the Saarthix platform single-handedly: Cloudflare at the edge, load balancing, an API gateway, containerised Spring Boot and React services, CI/CD and monitoring, on a startup budget.</p>
+        <p>I designed, hosted and run the entire Saarthix platform on my own, from DNS to database, built to stay reliable and cost as little as possible.</p>
+        <ul class="pf-points">
+          <li>Cloudflare at the edge for DNS, CDN, TLS and WAF</li>
+          <li>Load balancer and API gateway as the single front door</li>
+          <li>Containerised Spring Boot and React services shipped by CI/CD</li>
+          <li>Monitoring and alerting so one person can run it</li>
+        </ul>
         <div class="chips"><span class="chip">Cloudflare</span><span class="chip">Nginx</span><span class="chip">API gateway</span><span class="chip">Docker</span><span class="chip">Spring Boot</span><span class="chip">React</span><span class="chip">CI/CD</span></div>
-        <div class="proj-links"><a class="btn sm" href="/saarthix-case-study">Read the Saarthix case study →</a></div>
+        <div class="pf-actions">
+          <a class="btn" href="/saarthix-case-study">Read the case study →</a>
+          <a class="btn alt" href="#hosting">Explore the live map ↑</a>
+        </div>
+      </div>
+      <div class="pfeat-visual" aria-hidden="true">
+        <div class="pv-line"><i></i></div>
+        <div class="pv-layer c"><span>🌐</span>Edge / CDN<em>DNS · WAF · TLS</em></div>
+        <div class="pv-layer c"><span>⚖</span>Load balancer<em>health-checked</em></div>
+        <div class="pv-layer v"><span>🚪</span>API gateway<em>auth · rate limits</em></div>
+        <div class="pv-layer v"><span>📦</span>Services<em>Spring Boot · React</em></div>
+        <div class="pv-layer g"><span>🗄</span>Data<em>DB · cache · storage</em></div>
+      </div>
+    </article>
+
+    <!-- filters -->
+    <div class="pfilters reveal" role="group" aria-label="Filter projects">
+      <button type="button" class="pf-btn on" data-f="all">All <b></b></button>
+      <button type="button" class="pf-btn" data-f="devops">DevOps &amp; Cloud <b></b></button>
+      <button type="button" class="pf-btn" data-f="web">Web <b></b></button>
+      <button type="button" class="pf-btn" data-f="ml">ML &amp; Data <b></b></button>
+      <button type="button" class="pf-btn" data-f="android">Android <b></b></button>
+    </div>
+
+    <div class="pgrid">
+      <article class="pcard" data-cat="devops">
+        <div class="pc-bar"><i></i><i></i><i></i><code>~/saarthix-test</code><span class="pc-lang" style="--l:#3dffa8">Docker</span></div>
+        <div class="pc-body">
+          <span class="pc-cat">DevOps &amp; Cloud</span>
+          <h3>Saarthi-Test: containerised stack</h3>
+          <p>A test-hosting version of SaarthiX: a React (Vite) frontend served by Nginx, a Spring Boot (Java 17) API and MongoDB 6, wired together with Docker Compose, with health-checked start-up ordering and a persistent data volume.</p>
+          <div class="chips"><span class="chip">Docker Compose</span><span class="chip">Nginx</span><span class="chip">Spring Boot</span><span class="chip">React</span><span class="chip">MongoDB</span></div>
+        </div>
+        <div class="pc-links"><a href="https://github.com/Hariom00027/saarthix-test" target="_blank" rel="noopener"><svg><use href="#i-gh"/></svg>Source</a></div>
       </article>
-      <article class="glass proj reveal d1 tilt">
-        <div class="proj-tag">OPEN SOURCE · THIS SITE</div>
-        <h3>DevOps portfolio on Cloudflare</h3>
-        <p>This site: hand-written HTML, CSS and JavaScript with no build step, deployed from GitHub to Cloudflare on every push. It ships security and caching headers, clean-URL redirects, a sitemap, structured data and IndexNow, and is tuned for Core Web Vitals.</p>
-        <div class="chips"><span class="chip">Cloudflare</span><span class="chip">GitHub</span><span class="chip">HTML · CSS · JS</span><span class="chip">Web performance</span><span class="chip">Technical SEO</span></div>
-        <div class="proj-links"><a class="btn sm" href="https://github.com/Hariom00027/Portfolio-devops" target="_blank" rel="noopener">View the source on GitHub →</a></div>
+
+      <article class="pcard" data-cat="devops web">
+        <div class="pc-bar"><i></i><i></i><i></i><code>~/Portfolio-devops</code><span class="pc-lang" style="--l:#22e4ff">JavaScript</span></div>
+        <div class="pc-body">
+          <span class="pc-cat">DevOps &amp; Cloud · Web</span>
+          <h3>This portfolio, on Cloudflare</h3>
+          <p>Hand-written HTML, CSS and JavaScript with no build step, deployed from GitHub to Cloudflare on every push, with security and caching headers, clean-URL redirects, structured data, IndexNow and Core Web Vitals tuning.</p>
+          <div class="chips"><span class="chip">Cloudflare</span><span class="chip">GitHub</span><span class="chip">Web performance</span><span class="chip">Technical SEO</span></div>
+        </div>
+        <div class="pc-links"><a href="https://github.com/Hariom00027/Portfolio-devops" target="_blank" rel="noopener"><svg><use href="#i-gh"/></svg>Source</a><a href="/" class="pc-live"><svg><use href="#i-ext"/></svg>Live</a></div>
+      </article>
+
+      <article class="pcard" data-cat="ml devops">
+        <div class="pc-bar"><i></i><i></i><i></i><code>~/customer-lifetime-value</code><span class="pc-lang" style="--l:#ffb547">Python</span></div>
+        <div class="pc-body">
+          <span class="pc-cat">ML &amp; Data · Deployment</span>
+          <h3>Customer lifetime value prediction</h3>
+          <p>Predicts customer lifetime value on an online-retail dataset with probabilistic models (the lifetimes library), packaged as a Streamlit app with a Procfile and setup script so it deploys with a single command.</p>
+          <div class="chips"><span class="chip">Python</span><span class="chip">lifetimes</span><span class="chip">Streamlit</span><span class="chip">Procfile deploy</span></div>
+        </div>
+        <div class="pc-links"><a href="https://github.com/Hariom00027/Customer-Lifetime-Value-Prediction" target="_blank" rel="noopener"><svg><use href="#i-gh"/></svg>Source</a></div>
+      </article>
+
+      <article class="pcard" data-cat="web">
+        <div class="pc-bar"><i></i><i></i><i></i><code>~/laxmikant-pandey</code><span class="pc-lang" style="--l:#9d5cff">HTML · CSS</span></div>
+        <div class="pc-body">
+          <span class="pc-cat">Web</span>
+          <h3>Laxmikant Pandey tribute site</h3>
+          <p>A tribute website with particle backgrounds, 3D tilt cards and a lightbox gallery, deployed on Vercel with single-page rewrites.</p>
+          <div class="chips"><span class="chip">HTML</span><span class="chip">CSS</span><span class="chip">JavaScript</span><span class="chip">Vercel</span></div>
+        </div>
+        <div class="pc-links"><a href="https://github.com/Hariom00027/Laxmikant-Pandey" target="_blank" rel="noopener"><svg><use href="#i-gh"/></svg>Source</a><a href="https://laxmikant-pandey.vercel.app" target="_blank" rel="noopener" class="pc-live"><svg><use href="#i-ext"/></svg>Live</a></div>
+      </article>
+
+      <article class="pcard" data-cat="web">
+        <div class="pc-bar"><i></i><i></i><i></i><code>~/whenwillidie.ai</code><span class="pc-lang" style="--l:#9d5cff">HTML</span></div>
+        <div class="pc-body">
+          <span class="pc-cat">Web</span>
+          <h3>whenwillidie.ai: lifespan estimator</h3>
+          <p>An interactive quiz that estimates remaining lifespan and shows a live countdown, built as a single-file web app and set up for a custom domain. Just for fun, not medical advice.</p>
+          <div class="chips"><span class="chip">HTML</span><span class="chip">JavaScript</span><span class="chip">Custom domain</span></div>
+        </div>
+        <div class="pc-links"><a href="https://github.com/Hariom00027/whenwillidie.ai" target="_blank" rel="noopener"><svg><use href="#i-gh"/></svg>Source</a></div>
+      </article>
+
+      <article class="pcard" data-cat="ml">
+        <div class="pc-bar"><i></i><i></i><i></i><code>~/predicting-house-prices</code><span class="pc-lang" style="--l:#ffb547">Python</span></div>
+        <div class="pc-body">
+          <span class="pc-cat">ML &amp; Data</span>
+          <h3>House price prediction</h3>
+          <p>Compares linear regression, decision tree and random forest regressors in a scikit-learn pipeline (imputation, scaling, stratified split, cross-validation), then exports the best model with joblib.</p>
+          <div class="chips"><span class="chip">Python</span><span class="chip">Jupyter</span><span class="chip">scikit-learn</span><span class="chip">joblib</span></div>
+        </div>
+        <div class="pc-links"><a href="https://github.com/Hariom00027/Predicting-House-Prices" target="_blank" rel="noopener"><svg><use href="#i-gh"/></svg>Source</a></div>
+      </article>
+
+      <article class="pcard" data-cat="android">
+        <div class="pc-bar"><i></i><i></i><i></i><code>~/TraCo</code><span class="pc-lang" style="--l:#ff3ea5">Java</span></div>
+        <div class="pc-body">
+          <span class="pc-cat">Android</span>
+          <h3>TraCo: COVID-19 tracker</h3>
+          <p>An Android app with daily worldwide COVID-19 updates (confirmed, deaths, recovered and active cases) pulled from a public COVID-19 data API.</p>
+          <div class="chips"><span class="chip">Java</span><span class="chip">Android</span><span class="chip">REST API</span></div>
+        </div>
+        <div class="pc-links"><a href="https://github.com/Hariom00027/TraCo" target="_blank" rel="noopener"><svg><use href="#i-gh"/></svg>Source</a></div>
+      </article>
+
+      <article class="pcard" data-cat="android">
+        <div class="pc-bar"><i></i><i></i><i></i><code>~/sms_app</code><span class="pc-lang" style="--l:#ff3ea5">Kotlin</span></div>
+        <div class="pc-body">
+          <span class="pc-cat">Android</span>
+          <h3>Android SMS app</h3>
+          <p>A Kotlin SMS client that sends and receives messages, groups them into conversation threads, manages contacts and raises notifications for incoming SMS.</p>
+          <div class="chips"><span class="chip">Kotlin</span><span class="chip">Android</span><span class="chip">Notifications</span></div>
+        </div>
+        <div class="pc-links"><a href="https://github.com/Hariom00027/sms_app" target="_blank" rel="noopener"><svg><use href="#i-gh"/></svg>Source</a></div>
+      </article>
+
+      <article class="pcard" data-cat="android">
+        <div class="pc-bar"><i></i><i></i><i></i><code>~/audio_extractor</code><span class="pc-lang" style="--l:#ff3ea5">Java</span></div>
+        <div class="pc-body">
+          <span class="pc-cat">Android</span>
+          <h3>Audio Extractor</h3>
+          <p>An Android app that pulls the audio track out of video files with the platform's MediaExtractor API, then saves, lists and deletes the extracted audio.</p>
+          <div class="chips"><span class="chip">Java</span><span class="chip">Android</span><span class="chip">MediaExtractor</span></div>
+        </div>
+        <div class="pc-links"><a href="https://github.com/Hariom00027/audio_extractor" target="_blank" rel="noopener"><svg><use href="#i-gh"/></svg>Source</a></div>
       </article>
     </div>
+    <p class="pgrid-more reveal"><a class="btn sm alt" href="https://github.com/Hariom00027?tab=repositories" target="_blank" rel="noopener"><svg><use href="#i-gh"/></svg> All repositories on GitHub</a></p>
   </div>
 </section>
 
@@ -369,7 +494,15 @@
       <div class="j-step" style="--i:4"><div class="j-node" aria-hidden="true">☸</div><div class="j-num">STEP 05</div><h3>Orchestrate</h3><p>Kubernetes with autoscaling, self-healing pods and Prometheus/Grafana on everything.</p><div class="j-tech">K8s · Helm · Grafana</div></div>
       <div class="j-step" style="--i:5"><div class="j-node" aria-hidden="true">💰</div><div class="j-num">STEP 06</div><h3>Harden & Optimize</h3><p>Least-privilege IAM, secrets in Vault, ARM/spot compute: secure, at the lowest possible cost.</p><div class="j-tech">IAM · Vault · FinOps</div></div>
     </div>
-    <p class="cs-link reveal">→ The whole story, layer by layer: <a href="/saarthix-case-study">Saarthix DevOps case study: edge, load balancer, API gateway, Kubernetes and cost</a></p>
+    <a class="cs-banner glass reveal" href="/saarthix-case-study">
+      <span class="csb-ic" aria-hidden="true">📄</span>
+      <span class="csb-body">
+        <span class="csb-kicker">CASE STUDY · ~9 MIN READ</span>
+        <span class="csb-title">How I hosted the Saarthix platform solo at minimal cost</span>
+        <span class="csb-sub">Edge, load balancer, API gateway, CI/CD, observability, security and cost, layer by layer.</span>
+      </span>
+      <span class="csb-go" aria-hidden="true">Read <i>→</i></span>
+    </a>
   </div>
 </section>
 

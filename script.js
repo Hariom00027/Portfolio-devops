@@ -1077,6 +1077,29 @@ Reach out on LinkedIn → type <span class="hl">linkedin</span>`,
   $$("#term-hints .btn").forEach(b => b.onclick = () => { exec(b.textContent); inp.focus({ preventScroll: true }); });
 });
 
+/* ---------------- Projects: filters + card spotlight ---------------- */
+whenNear("#projects", function projects() {
+  const cards = $$(".pcard"), btns = $$(".pf-btn");
+  const match = (card, f) => f === "all" || card.dataset.cat.split(" ").includes(f);
+  btns.forEach(b => { $("b", b).textContent = cards.filter(c => match(c, b.dataset.f)).length; });
+  btns.forEach(b => b.addEventListener("click", () => {
+    btns.forEach(x => x.classList.toggle("on", x === b));
+    let n = 0;
+    cards.forEach(c => {
+      const show = match(c, b.dataset.f);
+      c.classList.toggle("out", !show);
+      c.classList.remove("in-anim");
+      if (show) { c.style.setProperty("--n", n++); void c.offsetWidth; c.classList.add("in-anim"); }
+    });
+  }));
+  // soft light that follows the pointer (hover devices only)
+  if (matchMedia("(hover: hover)").matches) cards.forEach(c => c.addEventListener("pointermove", e => {
+    const r = c.getBoundingClientRect();
+    c.style.setProperty("--mx", e.clientX - r.left + "px");
+    c.style.setProperty("--my", e.clientY - r.top + "px");
+  }, { passive: true }));
+});
+
 /* ---------------- Footer & init ---------------- */
 $("#yr").textContent = new Date().getFullYear();
 const t0 = Date.now();
