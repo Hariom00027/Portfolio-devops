@@ -647,27 +647,48 @@ $$("[data-count]").forEach(el => statIO.observe(el));
     }],
   ];
 
-  const bar = $("#arch-events"), live = $(".live", bar);
+  const DESC = {
+    "⚡ traffic spike": "6.8× load hits the API → autoscaling",
+    "🛡 DDoS attack": "L7 flood from 1,200 IPs → WAF at the edge",
+    "🌙 off-peak scale-down": "Night window → shrink to save cost",
+    "☠ kill a pod": "OOMKill a random pod → self-healing",
+    "💥 node failure": "Spot node reclaimed → reschedule pods",
+    "🗄 DB failover": "Primary DB dies → promote replica",
+    "🧊 cache flush": "Redis emptied → miss storm → re-warm",
+    "⟳ rolling deploy": "Ship a new version with zero downtime",
+    "🐤 canary release": "10% → 50% → 100% with health analysis",
+    "↩ bad deploy → rollback": "Broken release → alert → auto-rollback",
+  };
+  const bar = $("#arch-events"), split = $("#arch-split"), statusBox = $("#ctrl-status"), status = $("span", statusBox);
   const groups = {};
   const buttons = [];
+  const bare = label => label.replace(/^\S+\s/, "");
   EVENTS.forEach(([grp, label, cls, fn]) => {
     if (!groups[grp]) {
       const g = document.createElement("div");
       g.className = "ev-group";
       g.innerHTML = `<div class="ev-lbl">${grp}</div><div class="ev-btns"></div>`;
-      bar.insertBefore(g, live);
+      bar.appendChild(g);
       groups[grp] = $(".ev-btns", g);
     }
     const b = document.createElement("button");
-    b.className = `btn ev ${cls}`; b.textContent = label;
+    b.type = "button";
+    b.className = `ev-item ${cls}`;
+    b.dataset.cursor = bare(label);
+    b.innerHTML = `<span class="ev-t">${label}</span><span class="ev-d">${DESC[label] || ""}</span><span class="ev-go">▶</span>`;
     b.onclick = async () => {
       if (busy) return;
       busy = true;
       buttons.forEach(x => x.disabled = x !== b);
-      b.classList.add("running");
+      b.classList.add("running"); split.classList.add("is-running");
+      statusBox.className = "ctrl-status run"; status.textContent = `running · ${bare(label)}`;
+      // stacked layout: bring the response into view
+      if (innerWidth <= 1000) $(".arch-stage").scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "start" });
       try { await fn(); } finally {
         hideBanner();
-        b.classList.remove("running");
+        b.classList.remove("running"); split.classList.remove("is-running");
+        b.classList.add("done"); setTimeout(() => b.classList.remove("done"), 2500);
+        statusBox.className = "ctrl-status ok"; status.textContent = `resolved · ${bare(label)} · system healthy`;
         buttons.forEach(x => x.disabled = false);
         busy = false;
       }
