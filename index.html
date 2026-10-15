@@ -83,50 +83,60 @@
 
 <!-- ================= HOSTING ================= -->
 <section id="hosting">
-  <div class="container">
-    <div class="sec-tag reveal">01 · kubectl get infra -o wide</div>
-    <h2 class="sec-title reveal d1">Inside the hosting stack.</h2>
-    <p class="sec-sub reveal d2">This is a live simulation of how requests move through the Saarthix infrastructure. <b style="color:var(--cyan)">Click any node</b> to see what it does, then fire an <b style="color:var(--pink)">action</b> on the left and watch the <b style="color:var(--green)">response</b> on the right: live events, metrics and the state of every microservice.</p>
-
-    <div class="arch-split" id="arch-split">
-      <!-- LEFT: actions + topology map -->
-      <div class="glass arch-left neon reveal">
-        <div class="panel-head">
-          <span class="ph-t act">⌘ ACTIONS</span>
-          <div class="ctrl-status" id="ctrl-status"><i></i><span>idle · pick an event</span></div>
-        </div>
-        <div id="arch-events"></div>
-        <div class="panel-head map-head"><span class="ph-t">◈ LIVE TOPOLOGY</span><span class="ph-hint">click a node to inspect</span><span class="live">LIVE</span></div>
-        <div class="arch-canvas">
-          <div class="arch-banner" id="arch-banner"></div>
-          <svg id="arch-svg" viewBox="0 0 900 560"></svg>
-        </div>
+  <div class="container dash-wrap">
+    <div class="dash-head reveal">
+      <div>
+        <div class="sec-tag">01 · kubectl get infra -o wide</div>
+        <h2 class="sec-title">Inside the hosting stack.</h2>
       </div>
-      <!-- RIGHT: responses -->
-      <div class="arch-right">
-        <div class="glass metrics reveal d1">
-          <div class="metric"><div class="m-lbl">REQ / SEC</div><div class="m-val ok" id="m-rps">0</div></div>
-          <div class="metric"><div class="m-lbl">P95 LATENCY</div><div class="m-val ok" id="m-lat">0ms</div></div>
-          <div class="metric"><div class="m-lbl">PODS RUNNING</div><div class="m-val ok" id="m-pods">0</div></div>
-          <div class="metric"><div class="m-lbl">ERROR RATE</div><div class="m-val ok" id="m-err">0%</div></div>
-          <canvas class="spark" id="spark"></canvas>
-        </div>
-        <div class="glass resp-term reveal d1">
-          <div class="term-top"><span class="d"></span><span class="d"></span><span class="d"></span><div class="title">response · kubectl get events -w</div></div>
-          <div class="arch-log" id="arch-log"></div>
-        </div>
-        <div class="glass svc-panel reveal d2">
-          <div class="panel-head"><span class="ph-t res">▤ MICROSERVICES</span><span class="ph-hint">ns: saarthix-prod</span></div>
-          <div class="svc-scroll"><table class="svc-table" id="svc-table">
-            <thead><tr><th>SERVICE</th><th>PODS</th><th>CPU</th><th>MEM</th><th>RPS</th><th>VERSION</th><th>STATUS</th></tr></thead>
-            <tbody></tbody>
-          </table></div>
-        </div>
-        <div class="glass inspector reveal d3" id="inspector"></div>
-      </div>
+      <p class="dash-how"><b class="c-pink">① Pick an action</b> <span>→</span> <b class="c-cyan">② watch the live map</b> <span>→</span> <b class="c-green">③ read the response</b></p>
     </div>
 
-    <div class="layers" id="host-layers"></div>
+    <div class="dash reveal d1" id="arch-split">
+      <!-- ① actions -->
+      <aside class="glass dash-col dash-actions">
+        <div class="panel-head"><span class="ph-t act">① ACTIONS</span></div>
+        <div id="arch-events"></div>
+        <div class="ctrl-status" id="ctrl-status"><i></i><span>idle · pick an action</span></div>
+      </aside>
+
+      <!-- ② live map -->
+      <div class="glass dash-col dash-map neon">
+        <div class="panel-head"><span class="ph-t">② LIVE MAP</span><span class="ph-hint">hover or click any box to see what it does</span><span class="live">LIVE</span></div>
+        <div class="arch-canvas">
+          <div class="arch-banner" id="arch-banner"></div>
+          <svg id="arch-svg" viewBox="0 0 900 560" preserveAspectRatio="xMidYMid meet"></svg>
+        </div>
+        <div class="map-legend">
+          <span><i style="background:#22e4ff"></i>request</span>
+          <span><i style="background:#3dffa8"></i>served from cache</span>
+          <span><i style="background:#ffb547"></i>retrying</span>
+          <span><i style="background:#ff4d6d"></i>error / blocked</span>
+        </div>
+      </div>
+
+      <!-- ③ response -->
+      <div class="dash-col dash-resp">
+        <div class="glass metrics">
+          <div class="metric"><div class="m-lbl">REQUESTS/S</div><div class="m-val ok" id="m-rps">0</div></div>
+          <div class="metric"><div class="m-lbl">LATENCY</div><div class="m-val ok" id="m-lat">0ms</div></div>
+          <div class="metric"><div class="m-lbl">PODS</div><div class="m-val ok" id="m-pods">0</div></div>
+          <div class="metric"><div class="m-lbl">ERRORS</div><div class="m-val ok" id="m-err">0%</div></div>
+          <canvas class="spark" id="spark"></canvas>
+        </div>
+        <div class="glass resp-term">
+          <div class="term-top"><span class="d"></span><span class="d"></span><span class="d"></span><div class="title">③ RESPONSE · live events</div></div>
+          <div class="arch-log" id="arch-log"></div>
+        </div>
+        <div class="glass svc-panel">
+          <div class="panel-head"><span class="ph-t res">▤ MICROSERVICES</span></div>
+          <table class="svc-table" id="svc-table">
+            <thead><tr><th>SERVICE</th><th>PODS</th><th>CPU</th><th>STATUS</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 

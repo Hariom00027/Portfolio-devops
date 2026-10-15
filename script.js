@@ -363,8 +363,10 @@ $$("[data-count]").forEach(el => statIO.observe(el));
     const t1 = el("text", { x: 72, y: 22 }, g); t1.textContent = n.t;
     const t2 = el("text", { x: 72, y: 36, class: "sub" }, g); t2.textContent = n.s; n.subEl = t2;
     n.g = g;
+    el("title", {}, g).textContent = `${n.t} · ${n.role}
+${n.d}`;
     if (n.pods != null) { n.podG = el("g", { transform: `translate(0,${H + 8})` }, g); n.podState = Array(n.pods).fill("ok"); }
-    g.addEventListener("click", () => select(k));
+    g.addEventListener("click", () => { select(k); describe(k); });
   }
 
   function drawPods(n) {
@@ -375,6 +377,7 @@ $$("[data-count]").forEach(el => statIO.observe(el));
     });
   }
   const svcs = ["s1", "s2", "s3", "s4"];
+  let describe = () => {};
   const SVC_META = { s1: { ver: "v2.4.1", mem: 310, share: .2 }, s2: { ver: "v3.9.0", mem: 420, share: .45 }, s3: { ver: "v1.7.3", mem: 380, share: .2 }, s4: { ver: "v1.2.8", mem: 190, share: .15 } };
   svcs.forEach(k => Object.assign(N[k], SVC_META[k]));
   svcs.forEach(k => drawPods(N[k]));
@@ -384,8 +387,7 @@ $$("[data-count]").forEach(el => statIO.observe(el));
     const n = N[k];
     $$(".node", svg).forEach(g => g.classList.remove("sel"));
     n.g.classList.add("sel");
-    ins.innerHTML = `<div class="ins-ic">${n.ic}</div><h4>${n.t}</h4><div class="ins-role">${n.role}</div><p>${n.d}</p><ul>${n.li.map(x => `<li>${x}</li>`).join("")}</ul>`;
-    ins.animate([{ opacity: 0, transform: "translateY(10px)" }, { opacity: 1, transform: "none" }], { duration: 350, easing: "ease-out" });
+    if (ins) ins.innerHTML = `${n.ic} ${n.t}`;
   }
   select("lb");
 
@@ -463,10 +465,10 @@ $$("[data-count]").forEach(el => statIO.observe(el));
   const rows = {};
   svcs.forEach(k => {
     const tr = document.createElement("tr");
-    tr.innerHTML = `<td class="sv-n">${N[k].ic} ${N[k].t}</td><td class="sv-p"></td><td class="sv-c"></td><td class="sv-m"></td><td class="sv-r"></td><td class="sv-v"></td><td><span class="sv-s"></span></td>`;
-    tr.onclick = () => select(k);
+    tr.innerHTML = `<td class="sv-n">${N[k].ic} ${N[k].t}</td><td class="sv-p"></td><td class="sv-c"></td><td><span class="sv-s"></span></td>`;
+    tr.onclick = () => { select(k); describe(k); };
     tbody.appendChild(tr);
-    rows[k] = { tr, p: $(".sv-p", tr), c: $(".sv-c", tr), m: $(".sv-m", tr), r: $(".sv-r", tr), v: $(".sv-v", tr), s: $(".sv-s", tr) };
+    rows[k] = { tr, p: $(".sv-p", tr), c: $(".sv-c", tr), s: $(".sv-s", tr) };
   });
   function svcStatus(n) {
     const ps = n.podState;
@@ -486,11 +488,9 @@ $$("[data-count]").forEach(el => statIO.observe(el));
       const [st, cls] = svcStatus(n);
       r.p.innerHTML = `<b>${up}/${total}</b> ${n.podState.map(p => `<i class="pd ${p}"></i>`).join("")}`;
       r.c.innerHTML = `<span class="bar"><i style="width:${cpu}%" class="${cpu > 80 ? "hot" : cpu > 60 ? "warm" : ""}"></i></span>${cpu}%`;
-      r.m.textContent = up ? Math.round(n.mem * (.9 + cpu / 400) + rand(-6, 6)) + "Mi" : "-";
-      r.r.textContent = rps;
-      r.v.textContent = n.ver;
       r.s.textContent = st; r.s.className = "sv-s " + cls;
       r.tr.classList.toggle("flag", cls !== "ok");
+      r.tr.title = `${n.t} · ${n.ver} · ${rps} req/s`;
     });
   }
   renderSvc(59);
@@ -544,6 +544,7 @@ $$("[data-count]").forEach(el => statIO.observe(el));
     bannerEl.textContent = text;
   }
   const hideBanner = (ms = 1800) => { bannerT = setTimeout(() => bannerEl.classList.remove("show"), ms); };
+  describe = k => { if (busy) return; banner(`${N[k].ic} ${N[k].t.toUpperCase()} · ${N[k].role}`); hideBanner(2600); };
   const mark = (k, cls, on = true) => N[k].g.classList.toggle(cls, on);
   const setSub = (k, txt) => { N[k].subEl.textContent = txt; };
   function shock(k) {
@@ -718,7 +719,8 @@ $$("[data-count]").forEach(el => statIO.observe(el));
     b.type = "button";
     b.className = `ev-item ${cls}`;
     b.dataset.cursor = bare(label);
-    b.innerHTML = `<span class="ev-t">${label}</span><span class="ev-d">${DESC[label] || ""}</span><span class="ev-go">▶</span>`;
+    b.title = DESC[label] || "";
+    b.innerHTML = `<span class="ev-t">${label}</span><span class="ev-go">▶</span>`;
     b.onclick = async () => {
       if (busy) return;
       busy = true;
@@ -739,20 +741,6 @@ $$("[data-count]").forEach(el => statIO.observe(el));
     };
     groups[grp].appendChild(b); buttons.push(b);
   });
-})();
-
-/* ---------------- Hosting layers ---------------- */
-(function hostLayers() {
-  const L = [
-    ["Network & VPC", "Public/private subnets, NAT, security groups, bastion-less SSM access. Nothing stateful is reachable from the internet."],
-    ["Edge & TLS", "CDN + WAF at the edge, automatic certificates, HTTP/2 + Brotli, and DNS that can fail over in seconds."],
-    ["Load Balancing", "L7 balancing with active health checks, connection draining and zero-downtime config reloads."],
-    ["API Gateway", "Kong/Nginx with routing, JWT auth, rate limiting, CORS and request IDs for tracing every call."],
-    ["Compute & Orchestration", "Containers on Kubernetes/Docker with Helm, HPA autoscaling, probes and rolling deployments."],
-    ["Data & Backups", "Managed DB in private subnets, Redis cache, object storage with lifecycle rules, nightly backups and restore drills."],
-  ];
-  const wrap = $("#host-layers");
-  wrap.innerHTML = L.map(([t, d], i) => `<div class="glass layer reveal d${i % 4} tilt"><div class="l-num">L${i + 1}</div><h4>${t}</h4><p>${d}</p></div>`).join("");
 })();
 
 /* ---------------- CI/CD pipeline ---------------- */
