@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hariom Singh · DevOps Engineer</title>
+<meta name="description" content="Hariom Singh — DevOps & Cloud Engineer. Built, hosted and operates the entire Saarthix platform: load balancers, gateways, CI/CD, observability, at minimal cost.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body class="loading">
+
+<!-- Boot sequence -->
+<div id="boot">
+  <div>
+    <div id="boot-log"></div>
+    <div class="boot-bar"><i id="boot-fill"></i></div>
+  </div>
+</div>
+
+<canvas id="bg-canvas"></canvas>
+<div class="noise-glow a"></div>
+<div class="noise-glow b"></div>
+<div class="grid-floor"></div>
+<div class="scanlines"></div>
+<div id="progress"></div>
+
+<nav id="nav">
+  <a href="#hero" class="logo">HARIOM<span>.</span>OPS</a>
+  <button class="burger" aria-label="Menu" id="burger">☰</button>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="#about">about</a></li>
+    <li><a href="#hosting">hosting</a></li>
+    <li><a href="#pipeline">ci/cd</a></li>
+    <li><a href="#cost">cost</a></li>
+    <li><a href="#skills">skills</a></li>
+    <li><a href="#journey">journey</a></li>
+    <li><a href="#contact">contact</a></li>
+  </ul>
+</nav>
+
+<main>
+
+<!-- ================= HERO ================= -->
+<section id="hero">
+  <div class="container hero-grid">
+    <div>
+      <div class="hero-hello">&gt; whoami<span class="blink">_</span></div>
+      <h1 class="glitch" data-text="HARIOM SINGH">HARIOM SINGH</h1>
+      <div class="hero-role">~/$ <span class="typed" id="typed"></span><span class="caret"></span></div>
+      <p class="hero-desc">
+        Project Engineering Lead at <b>Saarthix</b>, now working as a <b>DevOps &amp; Cloud Engineer</b>.
+        I hosted and run the whole Saarthix platform on my own: edge, load balancers, API gateways,
+        containers, CI/CD and observability. I built it to be reliable and to cost as little as possible.
+      </p>
+      <div class="hero-cta">
+        <a href="#hosting" class="btn magnetic">▶ explore the infra</a>
+        <a href="https://www.linkedin.com/in/hariom2003/" target="_blank" rel="noopener" class="btn alt magnetic">⌁ linkedin</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><div class="num" data-count="1" data-suffix=" man">0</div><div class="lbl">entire infra team</div></div>
+        <div class="stat"><div class="num" data-count="99.9" data-dec="1" data-suffix="%">0</div><div class="lbl">uptime target</div></div>
+        <div class="stat"><div class="num" data-count="40" data-suffix="+">0</div><div class="lbl">technologies</div></div>
+        <div class="stat"><div class="num" data-count="0" data-suffix=" min">0</div><div class="lbl">deploy downtime</div></div>
+      </div>
+    </div>
+    <div class="orb-wrap" id="orb">
+      <div class="orb-ring"></div>
+      <div class="orb-ring r2"></div>
+      <div class="orb-ring r3"></div>
+      <div class="orb-core">
+        <svg viewBox="0 0 100 60" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round">
+          <path d="M25 30c0-10 8-18 18-18 14 0 20 36 34 36 10 0 18-8 18-18s-8-18-18-18c-14 0-20 36-34 36-10 0-18-8-18-18z" transform="translate(-10 0)"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="marquee"><div class="track" id="marquee"></div></div>
+
+<!-- ================= ABOUT / SHIFT ================= -->
+<section id="about">
+  <div class="container">
+    <div class="sec-tag reveal">01 · git checkout -b devops</div>
+    <h2 class="sec-title reveal d1">From shipping features<br>to running the platform.</h2>
+    <p class="sec-sub reveal d2">I started out writing the product. Then I took over everything it runs on. Now I want to do that full time, building platforms that are secure, observable, automated and cheap to run.</p>
+
+    <div class="shift-grid">
+      <div class="glass shift-card from reveal tilt">
+        <h3>Project Engineer Lead</h3>
+        <div class="when">@ Saarthix · now</div>
+        <ul>
+          <li>Led full-stack product engineering (Spring Boot + React)</li>
+          <li>Owned the architecture and technical decisions</li>
+          <li>Mentored the team, ran sprints and code reviews</li>
+          <li>Took the product from idea to production</li>
+        </ul>
+      </div>
+      <div class="shift-arrow reveal d2">
+        <svg viewBox="0 0 120 40">
+          <defs><linearGradient id="ag" x1="0" x2="1"><stop offset="0" stop-color="#22e4ff"/><stop offset="1" stop-color="#ff3ea5"/></linearGradient></defs>
+          <line class="flow" x1="0" y1="20" x2="104" y2="20" stroke="url(#ag)" stroke-width="3"/>
+          <path d="M100 8 L118 20 L100 32" fill="none" stroke="#ff3ea5" stroke-width="3"/>
+        </svg>
+      </div>
+      <div class="glass shift-card to neon reveal d3 tilt">
+        <h3>DevOps / Cloud / SRE</h3>
+        <div class="when">@ next · loading…</div>
+        <ul>
+          <li>Hosted and run the entire Saarthix production stack</li>
+          <li>Load balancers, API gateways, reverse proxies, TLS</li>
+          <li>CI/CD pipelines with security scanning built in</li>
+          <li>Observability, incident response, cost engineering</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Areas of work -->
+    <div class="layers" style="margin-top:60px">
+      <div class="glass layer reveal tilt"><div class="l-num">01</div><h4>🛡️ DevSecOps</h4><p>CI/CD with security built in: scanning containers, secrets and Kubernetes, tuning the WAF, IAM governance and compliance guardrails.</p></div>
+      <div class="glass layer reveal d1 tilt"><div class="l-num">02</div><h4>☁️ Cloud Engineering</h4><p>Secure, low-cost cloud environments on AWS and GCP: landing zones, networking, IAM, migrations and right-sizing compute.</p></div>
+      <div class="glass layer reveal d2 tilt"><div class="l-num">03</div><h4>📈 Site Reliability</h4><p>Keeping systems up with Kubernetes, observability stacks, incident handling, root cause analysis and automation that removes repetitive work.</p></div>
+      <div class="glass layer reveal d3 tilt"><div class="l-num">04</div><h4>🤖 Infra Automation</h4><p>Terraform, Ansible playbooks and Bash, Go and Python tooling that turn manual ops work into one command.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= HOSTING ================= -->
+<section id="hosting">
+  <div class="container">
+    <div class="sec-tag reveal">02 · kubectl get infra -o wide</div>
+    <h2 class="sec-title reveal d1">Inside the hosting stack.</h2>
+    <p class="sec-sub reveal d2">This is a live simulation of how requests move through the Saarthix infrastructure. <b style="color:var(--cyan)">Click any node</b> to see what it does, then trigger an event below: traffic spikes, a DDoS, failures, deploys or rollbacks. Watch the platform react and recover.</p>
+
+    <div class="arch-shell">
+      <div class="glass arch-stage neon reveal">
+        <div class="arch-toolbar" id="arch-events"><span class="live">LIVE</span></div>
+        <div class="arch-canvas">
+          <div class="arch-banner" id="arch-banner"></div>
+          <svg id="arch-svg" viewBox="0 0 900 560"></svg>
+        </div>
+      </div>
+      <div class="arch-side">
+        <div class="glass inspector reveal d1" id="inspector"></div>
+        <div class="glass metrics reveal d2">
+          <div class="metric"><div class="m-lbl">REQ / SEC</div><div class="m-val ok" id="m-rps">0</div></div>
+          <div class="metric"><div class="m-lbl">P95 LATENCY</div><div class="m-val ok" id="m-lat">0ms</div></div>
+          <div class="metric"><div class="m-lbl">PODS RUNNING</div><div class="m-val ok" id="m-pods">0</div></div>
+          <div class="metric"><div class="m-lbl">ERROR RATE</div><div class="m-val ok" id="m-err">0%</div></div>
+          <canvas class="spark" id="spark"></canvas>
+        </div>
+        <div class="glass arch-log reveal d3" id="arch-log"></div>
+      </div>
+    </div>
+
+    <div class="layers" id="host-layers"></div>
+  </div>
+</section>
+
+<!-- ================= PIPELINE ================= -->
+<section id="pipeline">
+  <div class="container">
+    <div class="sec-tag reveal">03 · git push origin main</div>
+    <h2 class="sec-title reveal d1">From commit to production.</h2>
+    <p class="sec-sub reveal d2">Every push runs through a pipeline: lint, test, scan, build, push, deploy, verify. It rolls back automatically if anything fails. Press the button to run it.</p>
+    <div class="glass pipe neon reveal">
+      <div class="pipe-head">
+        <div class="commit">commit <b id="sha">a1b2c3d</b> · <span id="cmsg">feat: add job recommendations API</span></div>
+        <button class="btn" id="btn-run">▶ run pipeline</button>
+      </div>
+      <div class="stages" id="stages"></div>
+      <div class="pipe-term" id="pipe-term"><div class="term-bar"><span></span><span></span><span></span></div><div class="c">$ waiting for trigger…</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= COST ================= -->
+<section id="cost">
+  <div class="container">
+    <div class="sec-tag reveal">04 · aws ce get-cost-and-usage</div>
+    <h2 class="sec-title reveal d1">Production-grade, startup budget.</h2>
+    <p class="sec-sub reveal d2">I kept monthly spend as low as possible without dropping reliability. These are the main areas I optimized.</p>
+    <div class="cost-grid">
+      <div class="glass cost-chart reveal">
+        <div class="bars" id="bars"></div>
+        <div class="legend"><span class="lb">typical managed setup</span><span class="la">my architecture</span></div>
+      </div>
+      <div class="cost-side">
+        <div class="glass saving neon reveal d1">
+          <div class="big"><span id="save-pct">0</span>%</div>
+          <div class="cap">MONTHLY INFRA COST SAVED</div>
+        </div>
+        <ul class="glass tactics reveal d2">
+          <li><b>01</b>Right-sized compute, with ARM/Graviton and spot capacity where it fits</li>
+          <li><b>02</b>Self-hosted Nginx/Kong gateway instead of paid managed gateways</li>
+          <li><b>03</b>CDN caching at the edge, which cut origin egress</li>
+          <li><b>04</b>Container bin-packing and autoscaling down to the floor</li>
+          <li><b>05</b>Self-managed open-source observability (Prometheus, Grafana, Loki)</li>
+          <li><b>06</b>Tags and budgets with alerts, so cost is tracked like any other SLO</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SKILLS ================= -->
+<section id="skills">
+  <div class="container">
+    <div class="sec-tag reveal">05 · helm list --all-namespaces</div>
+    <h2 class="sec-title reveal d1">The toolbox.</h2>
+    <p class="sec-sub reveal d2">The tools I use day to day across cloud, containers, automation, observability, security and data. <b style="color:var(--cyan)">Click any skill</b> to see what it&#39;s used for.</p>
+    <div class="skills-grid">
+      <div class="galaxy reveal" id="galaxy">
+        <div class="orbit o1"></div><div class="orbit o2"></div><div class="orbit o3"></div>
+        <div class="center">DEV<br>OPS</div>
+      </div>
+      <div class="skill-cats" id="skill-cats"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= TERMINAL ================= -->
+<section id="terminal">
+  <div class="container">
+    <div class="sec-tag reveal">06 · ssh guest@hariom.ops</div>
+    <h2 class="sec-title reveal d1">Talk to my shell.</h2>
+    <p class="sec-sub reveal d2">It's a working terminal. Type <code style="color:var(--cyan)">help</code> to see the commands.</p>
+    <div class="glass term-wrap neon reveal">
+      <div class="term-top"><span class="d"></span><span class="d"></span><span class="d"></span><div class="title">guest@hariom-ops: ~</div></div>
+      <div id="shell" data-cursor="text"></div>
+    </div>
+    <div class="term-hints reveal" id="term-hints"></div>
+  </div>
+</section>
+
+<!-- ================= JOURNEY ================= -->
+<section id="journey">
+  <div class="container">
+    <div class="sec-tag reveal">07 · git log --oneline</div>
+    <h2 class="sec-title reveal d1">The Saarthix journey.</h2>
+    <p class="sec-sub reveal d2">From the first commit to a production platform run by one person, in six steps.</p>
+    <div class="journey reveal" id="journey-track"><div class="j-line"><i></i></div></div>
+  </div>
+</section>
+
+<!-- ================= CONTACT ================= -->
+<section id="contact">
+  <div class="container">
+    <div class="glass contact-box neon reveal">
+      <div class="sec-tag">08 · kubectl apply -f hire-me.yaml</div>
+      <h2>Let's build<br>something <span>reliable</span>.</h2>
+      <p>I'm open to DevOps, Cloud, SRE and Platform Engineering roles where reliability, security and automation matter.</p>
+      <a href="https://www.linkedin.com/in/hariom2003/" target="_blank" rel="noopener" class="btn magnetic">⌁ connect on linkedin</a>
+      <div class="socials">
+        <a class="btn sm alt magnetic" href="https://www.linkedin.com/in/hariom2003/" target="_blank" rel="noopener">LinkedIn</a>
+        <a class="btn sm magnetic" href="#terminal">Terminal</a>
+        <a class="btn sm magnetic" href="#hosting">Architecture</a>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  built &amp; deployed with <span class="hb">♥</span> by Hariom Singh · <span id="yr"></span> · uptime: <span id="uptime">00:00:00</span>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
