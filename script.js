@@ -42,13 +42,16 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
     "[  0.903] cost-optimizer: budget within SLO ... <ok>",
     "[  1.020] launching portfolio.service ......... <ok>",
   ];
-  if (reduced) lines.length = 2;
+  // full boot once per visit; quick flash on reloads so content shows fast
+  let seen = false;
+  try { seen = sessionStorage.getItem("booted") === "1"; sessionStorage.setItem("booted", "1"); } catch (e) {}
+  if (reduced || seen) lines.length = 2;
   for (let i = 0; i < lines.length; i++) {
     log.innerHTML += lines[i].replace("<ok>", '<span class="ok">[ OK ]</span>') + "\n";
     fill.style.width = ((i + 1) / lines.length) * 100 + "%";
-    await sleep(reduced ? 50 : rand(90, 190));
+    await sleep(reduced || seen ? 40 : rand(45, 85));
   }
-  await sleep(300);
+  await sleep(seen ? 50 : 150);
   $("#boot").classList.add("done");
   document.body.classList.remove("loading");
   startTyping();
@@ -308,7 +311,7 @@ $$("[data-count]").forEach(el => statIO.observe(el));
     ["☸", "Orchestrate", "Kubernetes with autoscaling, self-healing pods and Prometheus/Grafana on everything.", "K8s · Helm · Grafana"],
     ["💰", "Harden & Optimize", "Least-privilege IAM, secrets in Vault, ARM/spot compute: secure, at the lowest possible cost.", "IAM · Vault · FinOps"],
   ];
-  $("#journey-track").insertAdjacentHTML("beforeend", steps.map(([ic, t, d, tech], i) =>
+  if (!$(".j-step")) $("#journey-track").insertAdjacentHTML("beforeend", steps.map(([ic, t, d, tech], i) =>
     `<div class="j-step" style="--i:${i}"><div class="j-node">${ic}</div><div class="j-num">STEP 0${i + 1}</div><h4>${t}</h4><p>${d}</p><div class="j-tech">${tech}</div></div>`).join(""));
 })();
 
@@ -883,7 +886,8 @@ const SKILL_ALIAS = { "K8s": "Kubernetes", "Kong": "Kong Gateway", "GH Actions":
 
 (function skills() {
   const cats = $("#skill-cats");
-  cats.innerHTML = SKILLS.map(([t, p, list], i) => `
+  // skills are pre-rendered in index.html for search engines; build only if missing
+  if (!cats.children.length) cats.innerHTML = SKILLS.map(([t, p, list], i) => `
     <div class="glass skill-cat reveal d${i % 4}">
       <h4><span>${t}</span><span>${p}%</span></h4>
       <div class="meter"><i data-w="${p}"></i></div>

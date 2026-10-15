@@ -40,7 +40,7 @@ a { color: inherit; text-decoration: none; }
   position: fixed; inset: 0; z-index: 1000;
   background: #010207;
   display: flex; align-items: center; justify-content: center;
-  transition: opacity .8s ease, visibility .8s;
+  transition: opacity .5s ease, visibility .5s;
 }
 #boot.done { opacity: 0; visibility: hidden; }
 #boot-log {
@@ -188,8 +188,10 @@ h2.sec-title {
 .hero-hello { font-family: var(--mono); color: var(--green); font-size: 15px; margin-bottom: 18px; }
 .hero-hello .blink { animation: blink 1s steps(1) infinite; }
 @keyframes blink { 50% { opacity: 0; } }
+.hero-h1 { margin: 0; font-weight: inherit; }
+.h1-sub { display: block; margin-top: 16px; font-family: var(--mono); font-weight: 500; font-size: clamp(13px, 1.5vw, 17px); letter-spacing: 4px; text-transform: uppercase; color: var(--cyan); text-shadow: 0 0 12px rgba(34,228,255,.4); }
 .glitch {
-  font-family: var(--display); font-weight: 900; font-size: clamp(48px, 9vw, 118px); line-height: .95;
+  display: block; font-family: var(--display); font-weight: 900; font-size: clamp(48px, 9vw, 118px); line-height: .95;
   position: relative; letter-spacing: 2px; color: #fff;
   text-shadow: 0 0 30px rgba(34,228,255,.35);
 }
@@ -279,7 +281,7 @@ h2.sec-title {
 .journey.in .j-node { border-color: var(--cyan); box-shadow: 0 0 0 6px rgba(34,228,255,.08), 0 0 18px rgba(34,228,255,.45); }
 .j-step:hover .j-node { transform: scale(1.12) rotate(-6deg); }
 .j-num { font-family: var(--mono); font-size: 11px; color: var(--cyan); letter-spacing: 1.5px; }
-.j-step h4 { font-family: var(--display); font-size: 15px; margin: 4px 0 6px; }
+.j-step h4, .j-step h3 { font-family: var(--display); font-size: 15px; margin: 4px 0 6px; }
 .j-step p { color: var(--muted); font-size: 13px; line-height: 1.5; }
 .j-tech { font-family: var(--mono); font-size: 10.5px; color: #cdb6ff; margin-top: 8px; opacity: .85; }
 
@@ -325,7 +327,7 @@ h2.sec-title {
 .layer { padding: 26px; transition: transform .4s, border-color .4s; transform-style: preserve-3d; }
 .layer:hover { border-color: rgba(34,228,255,.5); }
 .layer .l-num { font-family: var(--display); font-size: 42px; font-weight: 900; color: transparent; -webkit-text-stroke: 1px rgba(34,228,255,.5); line-height: 1; }
-.layer h4 { font-family: var(--display); font-size: 17px; margin: 10px 0; }
+.layer h4, .layer h3 { font-family: var(--display); font-size: 17px; margin: 10px 0; }
 .layer p { color: var(--muted); font-size: 14px; }
 
 /* ---------- Pipeline ---------- */
@@ -399,7 +401,7 @@ h2.sec-title {
 .planet:hover { scale: 1.2; z-index: 3; }
 .skill-cats { display: grid; gap: 16px; }
 .skill-cat { padding: 20px 22px; }
-.skill-cat h4 { font-family: var(--mono); font-size: 13px; color: var(--cyan); letter-spacing: 1.5px; margin-bottom: 12px; display: flex; justify-content: space-between; }
+.skill-cat h4, .skill-cat h3 { font-family: var(--mono); font-size: 13px; color: var(--cyan); letter-spacing: 1.5px; margin-bottom: 12px; display: flex; justify-content: space-between; }
 .meter { height: 6px; border-radius: 3px; background: rgba(255,255,255,.06); overflow: hidden; margin-bottom: 12px; }
 .meter i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--violet), var(--cyan)); transition: width 1.6s cubic-bezier(.2,.8,.2,1); box-shadow: 0 0 10px var(--cyan); }
 
@@ -666,3 +668,8 @@ button.chip:hover { background: rgba(34,228,255,.12); border-color: var(--cyan);
   .dash-how { font-size: 11px; }
   .panel-head .ph-hint { display: none; }
 }
+
+/* footer links */
+.foot-links { display: flex; justify-content: center; gap: 18px; margin-bottom: 10px; }
+.foot-links a { color: var(--muted); transition: color .2s; }
+.foot-links a:hover { color: var(--cyan); }
