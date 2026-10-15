@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Hariom Singh – DevOps Engineer Portfolio | AWS, Kubernetes, CI/CD</title>
-<meta name="description" content="Hariom Singh is a DevOps Engineer who single-handedly built and hosts the Saarthix platform: AWS, Kubernetes, Terraform, CI/CD, load balancers and API gateways.">
+<meta name="description" content="DevOps portfolio of Hariom Singh, a DevOps Engineer who built and runs the Saarthix platform solo: load balancers, API gateways, CI/CD and monitoring.">
 <meta name="author" content="Hariom Singh">
 <meta name="keywords" content="Hariom Singh, DevOps Engineer, DevOps Engineer Portfolio, Cloud Engineer, SRE, Site Reliability Engineer, Platform Engineer, AWS, Kubernetes, Terraform, Docker, CI/CD, GitHub Actions, Nginx, Kong, Prometheus, Grafana, Saarthix">
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
@@ -23,8 +23,8 @@
 <meta property="og:site_name" content="Hariom Singh · DevOps">
 <meta property="og:url" content="https://hariomsinghdevops.prsoftwares.in/">
 <meta property="og:title" content="Hariom Singh – DevOps Engineer Portfolio">
-<meta property="og:description" content="DevOps Engineer who single-handedly built, hosts and runs the entire Saarthix platform: load balancers, API gateways, Kubernetes, CI/CD and observability, at minimal cost.">
-<meta property="og:image" content="https://hariomsinghdevops.prsoftwares.in/og-image.png">
+<meta property="og:description" content="DevOps Engineer who single-handedly built, hosts and runs the entire Saarthix platform: load balancers, API gateways, containers, CI/CD and observability, on a startup budget.">
+<meta property="og:image" content="https://hariomsinghdevops.prsoftwares.in/og-image.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Hariom Singh – DevOps Engineer · Cloud · SRE">
@@ -33,8 +33,8 @@
 <meta property="profile:last_name" content="Singh">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Hariom Singh – DevOps Engineer Portfolio">
-<meta name="twitter:description" content="Built, hosts and runs the entire Saarthix platform solo: AWS, Kubernetes, Terraform, CI/CD, load balancers and API gateways.">
-<meta name="twitter:image" content="https://hariomsinghdevops.prsoftwares.in/og-image.png">
+<meta name="twitter:description" content="Built, hosts and runs the entire Saarthix platform solo: load balancers, API gateways, CI/CD and observability. Skills: AWS, Kubernetes, Terraform.">
+<meta name="twitter:image" content="https://hariomsinghdevops.prsoftwares.in/og-image.jpg">
 <meta name="twitter:image:alt" content="Hariom Singh – DevOps Engineer · Cloud · SRE">
 
 <!-- Structured data: who this page is about -->
@@ -49,10 +49,10 @@
       "givenName": "Hariom",
       "familyName": "Singh",
       "alternateName": ["Hariom", "Hariom Singh DevOps"],
-      "jobTitle": ["DevOps Engineer", "Project Engineering Lead"],
-      "description": "DevOps Engineer and Project Engineering Lead at Saarthix who single-handedly built, hosts and runs the Saarthix platform: load balancers, API gateways, Kubernetes, CI/CD pipelines and observability, at minimal cost.",
+      "jobTitle": ["DevOps Engineer", "Project Engineer Lead"],
+      "description": "DevOps Engineer and Project Engineer Lead at Saarthix who single-handedly built, hosts and runs the Saarthix platform: load balancers, API gateways, containers, CI/CD pipelines and monitoring, on a startup budget.",
       "url": "https://hariomsinghdevops.prsoftwares.in/",
-      "image": "https://hariomsinghdevops.prsoftwares.in/og-image.png",
+      "image": "https://hariomsinghdevops.prsoftwares.in/og-image.jpg",
       "worksFor": { "@type": "Organization", "name": "Saarthix" },
       "sameAs": [
         "https://www.linkedin.com/in/hariom2003/",
@@ -69,7 +69,7 @@
       "dateModified": "2026-10-15",
       "mainEntity": { "@id": "https://hariomsinghdevops.prsoftwares.in/#person" },
       "isPartOf": { "@id": "https://hariomsinghdevops.prsoftwares.in/#website" },
-      "primaryImageOfPage": "https://hariomsinghdevops.prsoftwares.in/og-image.png"
+      "primaryImageOfPage": "https://hariomsinghdevops.prsoftwares.in/og-image.jpg"
     },
     {
       "@type": "WebSite",
@@ -85,10 +85,10 @@
 }
 </script>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css">
+<link rel="preload" href="/fonts/orbitron-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/space-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/styles.css">
 </head>
 <body class="loading">
 
@@ -115,6 +115,7 @@
     <li><a href="#pipeline">ci/cd</a></li>
     <li><a href="#cost">cost</a></li>
     <li><a href="#skills">skills</a></li>
+    <li><a href="#projects">projects</a></li>
     <li><a href="#journey">journey</a></li>
     <li><a href="#about">about</a></li>
     <li><a href="#contact">contact</a></li>
@@ -131,18 +132,18 @@
       <h1 class="hero-h1"><span class="glitch" data-text="HARIOM SINGH">HARIOM SINGH</span><span class="h1-sub">DevOps Engineer Portfolio</span></h1>
       <div class="hero-role" aria-hidden="true">~/$ <span class="typed" id="typed"></span><span class="caret"></span></div>
       <p class="hero-desc">
-        I'm <b>Hariom Singh</b>, a <b>DevOps &amp; Cloud Engineer</b> and Project Engineering Lead at <b>Saarthix</b>.
+        I'm <b>Hariom Singh</b>, a <b>DevOps &amp; Cloud Engineer</b> and Project Engineer Lead at <b>Saarthix</b>.
         I hosted and run the whole Saarthix platform on my own: edge, load balancers, API gateways,
-        Kubernetes, CI/CD and observability. I built it to be reliable and to cost as little as possible.
+        containers, CI/CD and observability. I built it to be reliable and to cost as little as possible.
       </p>
       <div class="hero-cta">
         <a href="#hosting" class="btn magnetic">▶ explore the infra</a>
         <a href="https://www.linkedin.com/in/hariom2003/" target="_blank" rel="noopener" class="btn alt magnetic">⌁ linkedin</a>
       </div>
       <div class="hero-stats">
-        <div class="stat"><div class="num" data-count="1" data-suffix=" man">0</div><div class="lbl">entire infra team</div></div>
-        <div class="stat"><div class="num" data-count="99.9" data-dec="1" data-suffix="%">0</div><div class="lbl">uptime target</div></div>
-        <div class="stat"><div class="num" data-count="40" data-suffix="+">0</div><div class="lbl">technologies</div></div>
+        <div class="stat"><div class="num" data-count="1" data-suffix=" man">1</div><div class="lbl">entire infra team</div></div>
+        <div class="stat"><div class="num" data-count="99.9" data-dec="1" data-suffix="%">99.9</div><div class="lbl">uptime target</div></div>
+        <div class="stat"><div class="num" data-count="40" data-suffix="+">40</div><div class="lbl">technologies</div></div>
         <div class="stat"><div class="num" data-count="0" data-suffix=" min">0</div><div class="lbl">deploy downtime</div></div>
       </div>
     </div>
@@ -225,11 +226,11 @@
 <section id="pipeline">
   <div class="container">
     <div class="sec-tag reveal">02 · git push origin main</div>
-    <h2 class="sec-title reveal d1">From commit to production.</h2>
+    <h2 class="sec-title reveal d1">CI/CD: from commit to production.</h2>
     <p class="sec-sub reveal d2">Every push runs through a pipeline: lint, test, scan, build, push, deploy, verify. It rolls back automatically if anything fails. Press the button to run it.</p>
     <div class="glass pipe neon reveal">
       <div class="pipe-head">
-        <div class="commit">commit <b id="sha">a1b2c3d</b> · <span id="cmsg">feat: add job recommendations API</span></div>
+        <div class="commit"><span class="sim-tag">simulated run</span> commit <b id="sha">a1b2c3d</b> · <span id="cmsg">feat: add job recommendations API</span></div>
         <button class="btn" id="btn-run">▶ run pipeline</button>
       </div>
       <div class="stages" id="stages"></div>
@@ -242,17 +243,18 @@
 <section id="cost">
   <div class="container">
     <div class="sec-tag reveal">03 · aws ce get-cost-and-usage</div>
-    <h2 class="sec-title reveal d1">Production-grade, startup budget.</h2>
+    <h2 class="sec-title reveal d1">Cost optimization on a startup budget.</h2>
     <p class="sec-sub reveal d2">I kept monthly spend as low as possible without dropping reliability. These are the main areas I optimized.</p>
     <div class="cost-grid">
       <div class="glass cost-chart reveal">
         <div class="bars" id="bars"></div>
         <div class="legend"><span class="lb">typical managed setup</span><span class="la">my architecture</span></div>
+        <p class="legend-note">Illustrative relative comparison, not billed figures.</p>
       </div>
       <div class="cost-side">
         <div class="glass saving neon reveal d1">
-          <div class="big"><span id="save-pct">0</span>%</div>
-          <div class="cap">MONTHLY INFRA COST SAVED</div>
+          <div class="big">6</div>
+          <div class="cap">COST LEVERS IN PRODUCTION</div>
         </div>
         <ul class="glass tactics reveal d2">
           <li><b>01</b>Right-sized compute, with ARM/Graviton and spot capacity where it fits</li>
@@ -271,7 +273,7 @@
 <section id="skills">
   <div class="container">
     <div class="sec-tag reveal">04 · helm list --all-namespaces</div>
-    <h2 class="sec-title reveal d1">The toolbox.</h2>
+    <h2 class="sec-title reveal d1">The toolbox: DevOps skills &amp; tools.</h2>
     <p class="sec-sub reveal d2">The tools I use day to day across cloud, containers, automation, observability, security and data. <b style="color:var(--cyan)">Click any skill</b> to see what it&#39;s used for.</p>
     <div class="skills-grid">
       <div class="galaxy reveal" id="galaxy">
@@ -328,10 +330,35 @@
   </div>
 </section>
 
+<!-- ================= PROJECTS ================= -->
+<section id="projects">
+  <div class="container">
+    <div class="sec-tag reveal">06 · ls ~/projects</div>
+    <h2 class="sec-title reveal d1">DevOps projects.</h2>
+    <p class="sec-sub reveal d2">The real work behind this DevOps portfolio, with a write-up or the source for each.</p>
+    <div class="proj-grid">
+      <article class="glass proj reveal tilt">
+        <div class="proj-tag">PRODUCTION · SAARTHIX</div>
+        <h3>Saarthix platform hosting</h3>
+        <p>Designed and run the hosting for the Saarthix platform single-handedly: Cloudflare at the edge, load balancing, an API gateway, containerised Spring Boot and React services, CI/CD and monitoring, on a startup budget.</p>
+        <div class="chips"><span class="chip">Cloudflare</span><span class="chip">Nginx</span><span class="chip">API gateway</span><span class="chip">Docker</span><span class="chip">Spring Boot</span><span class="chip">React</span><span class="chip">CI/CD</span></div>
+        <div class="proj-links"><a class="btn sm" href="/saarthix-case-study">Read the Saarthix case study →</a></div>
+      </article>
+      <article class="glass proj reveal d1 tilt">
+        <div class="proj-tag">OPEN SOURCE · THIS SITE</div>
+        <h3>DevOps portfolio on Cloudflare</h3>
+        <p>This site: hand-written HTML, CSS and JavaScript with no build step, deployed from GitHub to Cloudflare on every push. It ships security and caching headers, clean-URL redirects, a sitemap, structured data and IndexNow, and is tuned for Core Web Vitals.</p>
+        <div class="chips"><span class="chip">Cloudflare</span><span class="chip">GitHub</span><span class="chip">HTML · CSS · JS</span><span class="chip">Web performance</span><span class="chip">Technical SEO</span></div>
+        <div class="proj-links"><a class="btn sm" href="https://github.com/Hariom00027/Portfolio-devops" target="_blank" rel="noopener">View the source on GitHub →</a></div>
+      </article>
+    </div>
+  </div>
+</section>
+
 <!-- ================= JOURNEY ================= -->
 <section id="journey">
   <div class="container">
-    <div class="sec-tag reveal">06 · git log --oneline</div>
+    <div class="sec-tag reveal">07 · git log --oneline</div>
     <h2 class="sec-title reveal d1">The Saarthix journey.</h2>
     <p class="sec-sub reveal d2">From the first commit to a production platform run by one person, in six steps.</p>
     <div class="journey reveal" id="journey-track"><div class="j-line"><i></i></div>
@@ -349,7 +376,7 @@
 <!-- ================= ABOUT / SHIFT ================= -->
 <section id="about">
   <div class="container">
-    <div class="sec-tag reveal">07 · git checkout -b devops</div>
+    <div class="sec-tag reveal">08 · git checkout -b devops</div>
     <h2 class="sec-title reveal d1">From shipping features<br>to running the platform.</h2>
     <p class="sec-sub reveal d2">I started out writing the product. Then I took over everything it runs on. Now I want to do that full time, building platforms that are secure, observable, automated and cheap to run.</p>
 
@@ -397,7 +424,7 @@
 <section id="contact">
   <div class="container">
     <div class="glass contact-box neon reveal">
-      <div class="sec-tag">08 · kubectl apply -f hire-me.yaml</div>
+      <div class="sec-tag">09 · kubectl apply -f hire-me.yaml</div>
       <h2>Let's build<br>something <span>reliable</span>.</h2>
       <p>I'm open to DevOps, Cloud, SRE and Platform Engineering roles where reliability, security and automation matter.</p>
       <a href="https://www.linkedin.com/in/hariom2003/" target="_blank" rel="noopener" class="btn magnetic">⌁ connect on linkedin</a>

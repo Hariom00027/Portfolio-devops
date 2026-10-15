@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>How I Hosted the Saarthix Platform Solo at Minimal Cost – DevOps Case Study | Hariom Singh</title>
-<meta name="description" content="A DevOps case study by Hariom Singh: how one engineer hosted the Saarthix platform with Cloudflare at the edge, a load balancer, Kong API gateway, Kubernetes, CI/CD and observability, at startup cost.">
+<title>Saarthix DevOps Case Study: Hosting a Platform Solo | Hariom Singh</title>
+<meta name="description" content="DevOps case study by Hariom Singh: how one engineer hosted the Saarthix platform with a Cloudflare edge, load balancing, an API gateway, CI/CD and monitoring.">
 <meta name="author" content="Hariom Singh">
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
 <link rel="canonical" href="https://hariomsinghdevops.prsoftwares.in/saarthix-case-study">
@@ -21,7 +21,7 @@
 <meta property="og:url" content="https://hariomsinghdevops.prsoftwares.in/saarthix-case-study">
 <meta property="og:title" content="How I hosted the Saarthix platform solo at minimal cost – a DevOps case study">
 <meta property="og:description" content="Edge/CDN, load balancer, API gateway, Kubernetes, CI/CD, observability and cost optimisation: the full Saarthix hosting story, run by one engineer.">
-<meta property="og:image" content="https://hariomsinghdevops.prsoftwares.in/og-image.png">
+<meta property="og:image" content="https://hariomsinghdevops.prsoftwares.in/og-image.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Hariom Singh – DevOps Engineer · Cloud · SRE">
@@ -37,7 +37,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="How I hosted the Saarthix platform solo at minimal cost – a DevOps case study">
 <meta name="twitter:description" content="One engineer, a production platform, a startup budget: edge, load balancer, API gateway, Kubernetes, CI/CD and observability.">
-<meta name="twitter:image" content="https://hariomsinghdevops.prsoftwares.in/og-image.png">
+<meta name="twitter:image" content="https://hariomsinghdevops.prsoftwares.in/og-image.jpg">
 <meta name="twitter:image:alt" content="Hariom Singh – DevOps Engineer · Cloud · SRE">
 
 <script type="application/ld+json">
@@ -49,7 +49,7 @@
       "@id": "https://hariomsinghdevops.prsoftwares.in/saarthix-case-study#article",
       "headline": "How I hosted the Saarthix platform solo at minimal cost – a DevOps case study",
       "description": "How one engineer hosted the Saarthix platform with Cloudflare at the edge, a load balancer, Kong API gateway, Kubernetes, CI/CD and observability, at startup cost.",
-      "image": "https://hariomsinghdevops.prsoftwares.in/og-image.png",
+      "image": "https://hariomsinghdevops.prsoftwares.in/og-image.jpg",
       "datePublished": "2026-10-15",
       "dateModified": "2026-10-15",
       "inLanguage": "en",
@@ -72,10 +72,10 @@
 }
 </script>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css">
+<link rel="preload" href="/fonts/orbitron-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/space-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/styles.css">
 </head>
 <body class="cs-page">
 
@@ -101,7 +101,7 @@
   <div class="sec-tag">cat ./case-studies/saarthix.md</div>
   <h1 class="cs-h1">How I hosted the Saarthix platform solo at minimal cost</h1>
   <p class="cs-lede">A DevOps case study: edge, load balancer, API gateway, Kubernetes, CI/CD, observability and security, built and run by one engineer on a startup budget.</p>
-  <div class="cs-meta">By <a href="/" rel="author">Hariom Singh</a>, DevOps Engineer &amp; Project Engineering Lead at Saarthix · <time datetime="2026-10-15">15 Oct 2026</time> · ~9 min read</div>
+  <div class="cs-meta">By <a href="/" rel="author">Hariom Singh</a>, DevOps Engineer &amp; Project Engineer Lead at Saarthix · <time datetime="2026-10-15">15 Oct 2026</time> · ~9 min read</div>
 
   <div class="glass cs-tldr">
     <h2>TL;DR</h2>
@@ -109,7 +109,7 @@
       <li><b>Team:</b> one engineer (me) for the whole infrastructure, from DNS to database.</li>
       <li><b>Stack:</b> Cloudflare (DNS, CDN, WAF) → Nginx L7 load balancer → Kong API gateway → Kubernetes running Spring Boot microservices and a React frontend → PostgreSQL, MongoDB and Redis.</li>
       <li><b>Delivery:</b> Terraform for infrastructure, a CI/CD pipeline that lints, tests, scans, builds, deploys, verifies and rolls back on its own.</li>
-      <li><b>Cost:</b> roughly 65% lower than a typical fully managed setup: <mark class="tbd">[TBD: ₹/$ per month before → after]</mark>.</li>
+      <li><b>Cost:</b> designed from day one for a startup budget: self-hosted commodity layers and an edge that absorbs most traffic.</li><!-- TODO(Hariom): add the real monthly cost, before → after -->
       <li><b>Reliability:</b> 99.9% uptime target and zero-downtime deploys.</li>
     </ul>
   </div>
@@ -122,7 +122,7 @@
     <li><b>Cheap enough for a startup.</b> Every component had to justify its monthly bill.</li>
     <li><b>Simple enough for one person to run.</b> If something broke at 2 a.m., I was the on-call rotation, so the system had to explain itself.</li>
   </ul>
-  <p>Context for scale: <mark class="tbd">[TBD: users / monthly active users]</mark>, <mark class="tbd">[TBD: peak requests per second]</mark>, built between <mark class="tbd">[TBD: start month/year]</mark> and launch in <mark class="tbd">[TBD: launch month/year]</mark>.</p>
+  <!-- TODO(Hariom): add scale context: users / MAU, peak requests per second, start month and launch month -->
 
   <h2>The architecture, layer by layer</h2>
   <p>A request to Saarthix passes through five layers. Each one has a single job, and each one can be scaled, swapped or debugged on its own.</p>
@@ -136,7 +136,7 @@
   <p>I set cache rules per path, so the React bundle and images get long cache lifetimes with hashed filenames, while API routes bypass the cache entirely. Images go through imgproxy behind the cache, so resized variants are generated once and then served from the edge.</p>
 
   <h3>2. Load balancer: Nginx at L7</h3>
-  <p>Behind the edge sits an Nginx layer-7 load balancer. It spreads traffic across healthy backends, runs active health checks, and retries a request on another upstream when one fails. Keeping this layer self-hosted instead of paying for a managed load balancer per environment was a deliberate cost decision. The origin itself runs on <mark class="tbd">[TBD: origin cloud/provider and region]</mark> and accepts traffic only from Cloudflare.</p>
+  <p>Behind the edge sits an Nginx layer-7 load balancer. It spreads traffic across healthy backends, runs active health checks, and retries a request on another upstream when one fails. Keeping this layer self-hosted instead of paying for a managed load balancer per environment was a deliberate cost decision.</p><!-- TODO(Hariom): name the origin cloud provider and region -->
 
   <h3>3. API gateway: Kong as the single front door</h3>
   <p>All API traffic goes through Kong. It is the one place where cross-cutting rules live: authentication, rate limiting, request size limits, CORS and routing to the right service. That keeps the Spring Boot services focused on business logic, and it means a new service gets the same security posture by adding a route, not by copying code. Paid managed gateways bill per request; a self-hosted Kong is a fixed, small cost.</p>
@@ -174,7 +174,7 @@
   </ul>
 
   <h2>Cost optimisation: production-grade on a startup budget</h2>
-  <p>Cost was a design requirement from day one, not a clean-up job afterwards. The architecture comes in at roughly 65% below a typical fully managed equivalent. The main levers:</p>
+  <p>Cost was a design requirement from day one, not a clean-up job afterwards. The main levers:</p>
   <ol>
     <li><b>Let the edge do the work.</b> CDN caching at Cloudflare removes most origin traffic and egress.</li>
     <li><b>Self-host the commodity layers.</b> Nginx and Kong instead of per-request managed load balancers and gateways.</li>
@@ -183,16 +183,16 @@
     <li><b>Open-source observability.</b> Prometheus, Grafana and Loki instead of a per-host or per-GB SaaS bill.</li>
     <li><b>Treat cost like an SLO.</b> Tags, budgets and alerts mean a cost spike gets noticed the same day, like any other incident.</li>
   </ol>
-  <p>In numbers: <mark class="tbd">[TBD: quoted/estimated managed setup cost per month]</mark> versus <mark class="tbd">[TBD: actual monthly cost]</mark>.</p>
+  <!-- TODO(Hariom): add "In numbers": estimated managed-setup cost per month vs actual monthly cost -->
 
   <h2>Results</h2>
   <div class="cs-stats">
     <div class="glass"><b>1</b><span>engineer running the whole platform</span></div>
-    <div class="glass"><b>~65%</b><span>lower monthly infra cost than a typical managed setup</span></div>
+    <div class="glass"><b>6</b><span>cost levers designed in from day one</span></div>
     <div class="glass"><b>99.9%</b><span>uptime target</span></div>
     <div class="glass"><b>0 min</b><span>downtime per deploy</span></div>
   </div>
-  <p>Beyond the headline numbers: <mark class="tbd">[TBD: deploys per week, measured uptime, p95 latency, incidents since launch]</mark>.</p>
+  <!-- TODO(Hariom): add measured results: deploys per week, measured uptime, p95 latency, incidents since launch -->
 
   <h2>Lessons learned</h2>
   <h3>Boring and declarative beats clever</h3>
@@ -202,7 +202,7 @@
   <h3>Cost is a feature</h3>
   <p>Designing for cost from the start was much easier than cutting it later. Most of the savings came from architecture choices, not from discounts.</p>
   <h3>Observability is what makes solo possible</h3>
-  <p>One person can run a production platform only if the platform reports its own problems clearly. Investing in metrics, logs and good alerts early paid for itself the first time something went wrong. <mark class="tbd">[TBD: one real incident and what you changed afterwards]</mark></p>
+  <p>One person can run a production platform only if the platform reports its own problems clearly. Investing in metrics, logs and good alerts early paid for itself the first time something went wrong.</p><!-- TODO(Hariom): describe one real incident and what you changed afterwards -->
 
   <div class="glass neon cs-cta">
     <h2>Want this kind of platform?</h2>

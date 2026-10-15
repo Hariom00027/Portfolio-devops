@@ -7,7 +7,7 @@
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
     <image:image>
-      <image:loc>https://hariomsinghdevops.prsoftwares.in/og-image.png</image:loc>
+      <image:loc>https://hariomsinghdevops.prsoftwares.in/og-image.jpg</image:loc>
       <image:title>Hariom Singh – DevOps Engineer Portfolio</image:title>
     </image:image>
   </url>
@@ -17,7 +17,7 @@
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://hariomsinghdevops.prsoftwares.in/og-image.png</image:loc>
+      <image:loc>https://hariomsinghdevops.prsoftwares.in/og-image.jpg</image:loc>
       <image:title>How I hosted the Saarthix platform solo at minimal cost – a DevOps case study</image:title>
     </image:image>
   </url>

@@ -1,3 +1,8 @@
+/* Self-hosted fonts (latin subset, variable weights). Preloaded from the HTML head. */
+@font-face { font-family: "Orbitron"; src: url("/fonts/orbitron-latin.woff2") format("woff2"); font-weight: 400 900; font-style: normal; font-display: swap; }
+@font-face { font-family: "Space Grotesk"; src: url("/fonts/space-grotesk-latin.woff2") format("woff2"); font-weight: 300 700; font-style: normal; font-display: swap; }
+@font-face { font-family: "JetBrains Mono"; src: url("/fonts/jetbrains-mono-latin.woff2") format("woff2"); font-weight: 100 800; font-style: normal; font-display: swap; }
+
 :root {
   --bg: #04060d;
   --bg-2: #0a0f1f;
@@ -211,14 +216,14 @@ h2.sec-title {
   92% { clip-path: inset(15% 0 70% 0); transform: translate(-5px, 2px); }
   100% { clip-path: inset(100% 0 0 0); }
 }
-.hero-role { font-family: var(--mono); font-size: clamp(16px, 2.2vw, 22px); margin: 22px 0 18px; color: var(--muted); min-height: 1.6em; }
+.hero-role { font-family: var(--mono); font-size: clamp(16px, 2.2vw, 22px); margin: 22px 0 18px; color: var(--muted); height: 1.6em; white-space: nowrap; overflow: hidden; contain: strict; }
 .hero-role .typed { color: var(--cyan); text-shadow: var(--glow-c); }
 .hero-role .caret { display: inline-block; width: 10px; height: 1.1em; background: var(--cyan); vertical-align: -3px; animation: blink .8s steps(1) infinite; margin-left: 3px; }
 .hero-desc { color: var(--muted); font-size: 17px; max-width: 580px; margin-bottom: 34px; }
 .hero-desc b { color: var(--text); font-weight: 600; }
 .hero-cta { display: flex; gap: 16px; flex-wrap: wrap; }
 .hero-stats { display: flex; gap: 34px; margin-top: 36px; flex-wrap: wrap; }
-.stat .num { font-family: var(--display); font-size: 34px; font-weight: 800; color: #fff; }
+.stat .num { font-family: var(--display); font-size: 34px; font-weight: 800; color: #fff; font-variant-numeric: tabular-nums; }
 .stat .num::after { content: attr(data-suffix); color: var(--cyan); }
 .stat .lbl { font-family: var(--mono); font-size: 11px; color: var(--muted); letter-spacing: 1.5px; text-transform: uppercase; }
 
@@ -718,3 +723,32 @@ button.chip:hover { background: rgba(34,228,255,.12); border-color: var(--cyan);
 .cs-link { margin-top: 18px; font-family: var(--mono); font-size: 13px; }
 .cs-link a { color: var(--cyan); border-bottom: 1px dashed rgba(34,228,255,.5); }
 .cs-link a:hover { color: #fff; }
+
+/* phones and touch devices: keep the look, drop the most expensive always-on effects */
+@media (max-width: 760px), (pointer: coarse) {
+  .glitch::before, .glitch::after { animation: none; display: none; }
+  .grid-floor::before, .noise-glow { animation: none; }
+  .scanlines { display: none; }
+}
+
+/* Skip layout/paint of below-the-fold sections until they approach the viewport.
+   Content stays in the DOM (crawlable, find-in-page works); sizes are remembered once rendered. */
+main > section:not(#hero) { content-visibility: auto; contain-intrinsic-size: auto 900px; }
+#hosting { contain-intrinsic-size: auto 100vh; }
+
+.legend-note { margin-top: 8px; font-family: var(--mono); font-size: 11px; color: var(--muted); opacity: .8; }
+.sim-tag { font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: var(--amber); border: 1px solid rgba(255,181,71,.45); border-radius: 10px; padding: 1px 7px; margin-right: 8px; }
+/* in-article links must not rely on colour alone */
+.cs p a, .cs li a, .cs-meta a, .crumbs a { text-decoration: underline; text-underline-offset: 3px; }
+
+/* ---------- Projects ---------- */
+.proj-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+.proj { padding: 26px 26px 22px; display: flex; flex-direction: column; }
+.proj-tag { font-family: var(--mono); font-size: 11px; letter-spacing: 2px; color: var(--pink); }
+.proj h3 { font-family: var(--display); font-size: 20px; margin: 8px 0 10px; }
+.proj p { color: #c3cfe6; font-size: 15px; }
+.proj-links { margin-top: auto; padding-top: 18px; }
+@media (max-width: 760px) { .proj-grid { grid-template-columns: 1fr; } }
+
+/* anchor jumps land below the fixed nav */
+main > section { scroll-margin-top: 12px; }

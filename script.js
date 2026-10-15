@@ -12,7 +12,6 @@ const CONFIG = {
     "ci/cd_architect",
     "infra_as_code_enthusiast",
   ],
-  costSavedPct: 65,
   cost: [ // [label, typical managed, mine] relative monthly units
     ["Compute", 100, 38],
     ["LB / Gateway", 60, 12],
@@ -68,24 +67,42 @@ function rafWhileVisible(el, fn) {
   }, { rootMargin: "100px" }).observe(el);
   return () => on;
 }
-// Freeze CSS animations inside sections that are off screen.
+// Run fn once, when the element is within ~1 screen of the viewport (keeps startup work small).
+function whenNear(sel, fn, margin = "100% 0px") {
+  const el = $(sel);
+  if (!el) return;
+  const io = new IntersectionObserver(es => { if (es.some(e => e.isIntersecting)) { io.disconnect(); fn(); } }, { rootMargin: margin });
+  io.observe(el);
+}
+// Off-screen sections use content-visibility:auto (styles.css), which already skips their rendering and animation work.
+// The marquee sits outside those sections, so pause it explicitly when it scrolls away.
 const pauseIO = new IntersectionObserver(es => es.forEach(e => e.target.classList.toggle("paused", !e.isIntersecting)), { rootMargin: "150px" });
-$$("section, .marquee").forEach(s => pauseIO.observe(s));
+$$(".marquee").forEach(s => pauseIO.observe(s));
 
 /* ---------------- Background particle network ---------------- */
 (function bg() {
   const c = $("#bg-canvas"), ctx = c.getContext("2d");
-  let w, h, pts = [], mx = -9999, my = -9999;
+  let w = 0, h = 0, pts = [], mx = -9999, my = -9999, started = false;
   const D = 130, D2 = D * D, R2 = 150 * 150;
-  const resize = () => {
-    w = c.width = innerWidth; h = c.height = innerHeight; // 1x backing store: plenty for soft particles
+  const resize = (cw, ch) => {
+    w = c.width = Math.round(cw); h = c.height = Math.round(ch); // 1x backing store: plenty for soft particles
     const n = Math.min(65, Math.floor((w * h) / 20000));
     pts = Array.from({ length: n }, (_, i) => ({ x: rand(0, w), y: rand(0, h), vx: rand(-.3, .3), vy: rand(-.3, .3), r: rand(1, 2.2), pink: i % 7 === 0 }));
   };
-  let rt; resize(); addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(resize, 150); });
+  // The canvas is fixed to the viewport; ResizeObserver hands us its size after layout,
+  // so startup never forces a synchronous layout of the whole page.
+  let rt;
+  new ResizeObserver(([e]) => {
+    const { width, height } = e.contentRect;
+    if (!started) { started = true; resize(width, height); frame(); return; }
+    clearTimeout(rt); rt = setTimeout(() => resize(width, height), 150);
+  }).observe(c);
   addEventListener("mousemove", e => { mx = e.clientX; my = e.clientY; }, { passive: true });
   const alphas = [.06, .13, .22];
+  const lite = matchMedia("(max-width: 760px), (pointer: coarse)").matches; // phones: ~20fps is plenty for drifting dots
+  let tick = 0;
   function frame() {
+    if (lite && tick++ % 3) { if (!reduced) requestAnimationFrame(frame); return; }
     ctx.clearRect(0, 0, w, h);
     for (const p of pts) {
       p.x += p.vx; p.y += p.vy;
@@ -114,7 +131,6 @@ $$("section, .marquee").forEach(s => pauseIO.observe(s));
     ctx.fillStyle = "rgba(255,62,165,.8)"; ctx.fill(pink);
     if (!reduced) requestAnimationFrame(frame);
   }
-  frame();
 })();
 
 /* ---------------- Custom cursor: targeting reticle ---------------- */
@@ -260,6 +276,7 @@ function observeAll() { $$(".reveal:not(.in), .tl-item:not(.in)").forEach(el => 
 
 function countUp(el) {
   const to = parseFloat(el.dataset.count), dec = +el.dataset.dec || 0, t0 = performance.now(), dur = 1800;
+  el.style.minWidth = el.textContent.length + "ch"; // reserve the final width (tabular digits) without forcing a layout
   (function step(t) {
     const p = Math.min(1, (t - t0) / dur), v = to * (1 - Math.pow(1 - p, 3));
     el.textContent = v.toFixed(dec);
@@ -280,8 +297,7 @@ $$("[data-count]").forEach(el => statIO.observe(el));
   });
   let a = 0, R = 0;
   const front = els.map(() => null);
-  const measure = () => R = wrap.clientWidth * .47;
-  measure(); new ResizeObserver(measure).observe(wrap);
+  new ResizeObserver(([e]) => R = e.contentRect.width * .47).observe(wrap);
   rafWhileVisible(wrap, (t, dt) => {
     els.forEach((el, k) => {
       const ang = a + (k / els.length) * Math.PI * 2;
@@ -295,11 +311,11 @@ $$("[data-count]").forEach(el => statIO.observe(el));
 })();
 
 /* ---------------- Marquee ---------------- */
-(function marquee() {
+whenNear(".marquee", function marquee() {
   const words = ["AWS", "KUBERNETES", "TERRAFORM", "DOCKER", "NGINX", "KONG", "GITHUB ACTIONS", "JENKINS", "ARGOCD", "PROMETHEUS", "GRAFANA", "LOKI", "ANSIBLE", "HELM", "REDIS", "POSTGRESQL", "MONGODB", "VAULT", "TRIVY", "CLOUDFLARE", "GCP", "LINUX"];
   const html = words.map(w => `<span>${w}</span><span>✦</span>`).join("");
   $("#marquee").innerHTML = html + html;
-})();
+});
 
 /* ---------------- Journey (compact) ---------------- */
 (function journey() {
@@ -316,7 +332,7 @@ $$("[data-count]").forEach(el => statIO.observe(el));
 })();
 
 /* ---------------- Architecture simulation ---------------- */
-(function arch() {
+whenNear("#hosting", function arch() {
   const svg = $("#arch-svg"), NS = "http://www.w3.org/2000/svg";
   const N = {
     users: { x: 450, y: 38, ic: "👥", t: "Users", s: "web · mobile", role: "CLIENTS", d: "Students, recruiters and institutions reaching Saarthix from browsers and phones around the world.", li: ["HTTPS only (HSTS)", "Geo-distributed traffic", "Burst-heavy usage patterns"] },
@@ -744,10 +760,10 @@ ${n.d}`;
     };
     groups[grp].appendChild(b); buttons.push(b);
   });
-})();
+}, "0px 0px 300px 0px");
 
 /* ---------------- CI/CD pipeline ---------------- */
-(function pipeline() {
+whenNear("#pipeline", function pipeline() {
   const S = [
     ["📥", "checkout", [["c", "$ git clone --depth=1 saarthix/platform"], ["", "Receiving objects: 100% (1824/1824) done"]]],
     ["🧹", "lint", [["c", "$ ./gradlew spotlessCheck && npm run lint"], ["g", "✔ 0 problems found"]]],
@@ -789,10 +805,10 @@ ${n.d}`;
   $("#btn-run").onclick = run;
   const pipeIO = new IntersectionObserver(es => { if (es[0].isIntersecting) { run(); pipeIO.disconnect(); } }, { threshold: .4 });
   pipeIO.observe($(".pipe"));
-})();
+});
 
 /* ---------------- Cost chart ---------------- */
-(function cost() {
+whenNear("#cost", function cost() {
   const bars = $("#bars");
   const max = Math.max(...CONFIG.cost.map(c => c[1]));
   bars.innerHTML = CONFIG.cost.map(([l, a, b]) => `
@@ -804,6 +820,7 @@ ${n.d}`;
     if (!es[0].isIntersecting) return;
     $$(".bar", bars).forEach((b, i) => setTimeout(() => b.style.height = b.dataset.h + "%", i * 120));
     const el = $("#save-pct"), t0 = performance.now();
+    if (!el) { cio.disconnect(); return; } // no headline % until real figures are confirmed
     (function step(t) {
       const p = Math.min(1, (t - t0) / 2000);
       el.textContent = Math.round(CONFIG.costSavedPct * (1 - Math.pow(1 - p, 3)));
@@ -812,7 +829,7 @@ ${n.d}`;
     cio.disconnect();
   }, { threshold: .3 });
   cio.observe(bars);
-})();
+});
 
 /* ---------------- Skills ---------------- */
 const SKILLS = [
@@ -884,7 +901,7 @@ const SKILL_INFO = {
 };
 const SKILL_ALIAS = { "K8s": "Kubernetes", "Kong": "Kong Gateway", "GH Actions": "GitHub Actions", "Postgres": "PostgreSQL" };
 
-(function skills() {
+whenNear("#skills", function skills() {
   const cats = $("#skill-cats");
   // skills are pre-rendered in index.html for search engines; build only if missing
   if (!cats.children.length) cats.innerHTML = SKILLS.map(([t, p, list], i) => `
@@ -962,10 +979,10 @@ const SKILL_ALIAS = { "K8s": "Kubernetes", "Kong": "Kong Gateway", "GH Actions":
       p.el.style.transform = `translate3d(${Math.cos(p.a) * S * p.ring.r}px, ${Math.sin(p.a) * S * p.ring.r}px, 0) translate(-50%, -50%)`;
     });
   });
-})();
+});
 
 /* ---------------- Interactive shell ---------------- */
-(function shell() {
+whenNear("#terminal", function shell() {
   const sh = $("#shell");
   const PROMPT = '<span class="pr">guest@hariom-ops</span>:<span class="pa">~</span>$ ';
   const hist = []; let hi = 0;
@@ -986,8 +1003,8 @@ const SKILL_ALIAS = { "K8s": "Kubernetes", "Kong": "Kong Gateway", "GH Actions":
   <span class="hl">linkedin</span>      open LinkedIn
   <span class="hl">sudo hire-me</span>  you know you want to
   <span class="hl">clear</span>         clear screen`,
-    whoami: () => "hariom: DevOps / Cloud Engineer · Project Engineering Lead @ Saarthix",
-    about: () => `Project Engineering Lead at Saarthix moving into DevOps.
+    whoami: () => "hariom: DevOps / Cloud Engineer · Project Engineer Lead @ Saarthix",
+    about: () => `Project Engineer Lead at Saarthix moving into DevOps.
 I hosted and run the whole Saarthix platform myself: edge, load balancers,
 API gateways, containers, CI/CD, observability and security, at the lowest
 cost I could manage without giving up reliability.`,
@@ -1058,7 +1075,7 @@ Reach out on LinkedIn → type <span class="hl">linkedin</span>`,
   $("#term-hints").innerHTML = ["help", "whoami", "stack", "kubectl get pods", "neofetch", "sudo hire-me"]
     .map(c => `<button class="btn sm">${c}</button>`).join("");
   $$("#term-hints .btn").forEach(b => b.onclick = () => { exec(b.textContent); inp.focus({ preventScroll: true }); });
-})();
+});
 
 /* ---------------- Footer & init ---------------- */
 $("#yr").textContent = new Date().getFullYear();

@@ -1,6 +1,6 @@
 // Minimal static server for local preview: node serve.js
 const http = require("http"), fs = require("fs"), path = require("path");
-const types = { ".html": "text/html", ".css": "text/css", ".js": "text/javascript", ".png": "image/png", ".jpg": "image/jpeg", ".svg": "image/svg+xml", ".xml": "application/xml", ".txt": "text/plain", ".webmanifest": "application/manifest+json" };
+const types = { ".html": "text/html", ".css": "text/css", ".js": "text/javascript", ".png": "image/png", ".jpg": "image/jpeg", ".svg": "image/svg+xml", ".xml": "application/xml", ".txt": "text/plain", ".webmanifest": "application/manifest+json", ".woff2": "font/woff2" };
 const root = __dirname, port = process.env.PORT || 5173;
 http.createServer((req, res) => {
   let p = path.join(root, decodeURIComponent(req.url.split("?")[0]).replace(/\/$/, "/index.html"));
