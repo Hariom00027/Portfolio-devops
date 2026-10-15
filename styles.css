@@ -131,7 +131,7 @@ nav.scrolled { background: rgba(4,6,13,.94); padding: 12px 5vw; border-color: va
 
 /* ---------- Layout ---------- */
 main { position: relative; z-index: 2; }
-section { padding: 120px 5vw; position: relative; overflow-x: clip; }
+section { padding: 44px 5vw; position: relative; overflow-x: clip; }
 .container { max-width: 1240px; margin: 0 auto; }
 .sec-tag { font-family: var(--mono); color: var(--cyan); font-size: 13px; letter-spacing: 2px; margin-bottom: 10px; }
 .sec-tag::before { content: "// "; color: var(--muted); }
@@ -140,7 +140,7 @@ h2.sec-title {
   background: linear-gradient(90deg, #fff, var(--cyan) 50%, var(--violet));
   -webkit-background-clip: text; background-clip: text; color: transparent;
 }
-.sec-sub { color: var(--muted); max-width: 720px; font-size: 17px; margin-bottom: 56px; }
+.sec-sub { color: var(--muted); max-width: 720px; font-size: 17px; margin-bottom: 30px; }
 
 .glass {
   background: var(--panel);
@@ -183,7 +183,7 @@ h2.sec-title {
 .btn:disabled { opacity: .5; cursor: not-allowed; }
 
 /* ---------- Hero ---------- */
-#hero { min-height: 100vh; display: flex; align-items: center; padding-top: 140px; }
+#hero { min-height: 100vh; display: flex; align-items: center; padding-top: 100px; padding-bottom: 40px; }
 .hero-grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: 50px; align-items: center; }
 .hero-hello { font-family: var(--mono); color: var(--green); font-size: 15px; margin-bottom: 18px; }
 .hero-hello .blink { animation: blink 1s steps(1) infinite; }
@@ -215,7 +215,7 @@ h2.sec-title {
 .hero-desc { color: var(--muted); font-size: 17px; max-width: 580px; margin-bottom: 34px; }
 .hero-desc b { color: var(--text); font-weight: 600; }
 .hero-cta { display: flex; gap: 16px; flex-wrap: wrap; }
-.hero-stats { display: flex; gap: 34px; margin-top: 48px; flex-wrap: wrap; }
+.hero-stats { display: flex; gap: 34px; margin-top: 36px; flex-wrap: wrap; }
 .stat .num { font-family: var(--display); font-size: 34px; font-weight: 800; color: #fff; }
 .stat .num::after { content: attr(data-suffix); color: var(--cyan); }
 .stat .lbl { font-family: var(--mono); font-size: 11px; color: var(--muted); letter-spacing: 1.5px; text-transform: uppercase; }
@@ -417,8 +417,8 @@ h2.sec-title {
 .term-hints { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-top: 18px; }
 
 /* ---------- Contact ---------- */
-#contact { text-align: center; padding-bottom: 80px; }
-.contact-box { padding: 70px 30px; max-width: 900px; margin: 0 auto; overflow: hidden; }
+#contact { text-align: center; padding-bottom: 48px; }
+.contact-box { padding: 56px 30px; max-width: 900px; margin: 0 auto; overflow: hidden; }
 .contact-box h2 { font-family: var(--display); font-size: clamp(32px, 6vw, 68px); line-height: 1.05; margin-bottom: 18px; }
 .contact-box h2 span { color: var(--cyan); text-shadow: var(--glow-c); }
 .contact-box p { color: var(--muted); max-width: 560px; margin: 0 auto 36px; }
@@ -442,7 +442,7 @@ footer .hb { color: var(--pink); animation: pulse-txt 1.2s infinite; display: in
   .shift-arrow svg { width: 60px; }
 }
 @media (max-width: 760px) {
-  section { padding: 90px 16px; }
+  section { padding: 40px 16px; }
   nav { padding: 14px 16px; }
   nav.scrolled { padding: 10px 16px; }
   .nav-links { position: fixed; top: 58px; right: 16px; flex-direction: column; gap: 14px; padding: 20px 24px; background: rgba(4,6,13,.95); border: 1px solid var(--line); border-radius: 12px; display: none; }
@@ -543,7 +543,7 @@ button.chip:hover { background: rgba(34,228,255,.12); border-color: var(--cyan);
 }
 
 /* ---------- Hosting: one-screen dashboard ---------- */
-#hosting { padding: 74px 2vw 20px; min-height: 100vh; }
+#hosting { padding: 60px 2vw 12px; min-height: 100vh; }
 .dash-wrap { max-width: 1760px; }
 .dash-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px 24px; flex-wrap: wrap; margin-bottom: 12px; }
 .dash-head .sec-tag { margin-bottom: 4px; }
@@ -554,7 +554,7 @@ button.chip:hover { background: rgba(34,228,255,.12); border-color: var(--cyan);
 
 .dash {
   display: grid; grid-template-columns: 188px minmax(0, 1fr) 310px; gap: 12px;
-  height: max(520px, calc(100vh - 170px));
+  height: max(520px, calc(100vh - 148px));
 }
 .dash-col { display: flex; flex-direction: column; min-height: 0; min-width: 0; }
 .dash .glass { border-radius: 14px; }
@@ -649,7 +649,7 @@ button.chip:hover { background: rgba(34,228,255,.12); border-color: var(--cyan);
 
 /* below laptop width: stack, page scrolls normally */
 @media (max-width: 1100px) {
-  #hosting { min-height: 0; padding: 90px 16px 40px; }
+  #hosting { min-height: 0; padding: 48px 16px 24px; }
   .dash { height: auto; grid-template-columns: 1fr; }
   #arch-events { flex-direction: row; flex-wrap: wrap; overflow: visible; gap: 10px 16px; }
   #arch-events .ev-btns { flex-direction: row; flex-wrap: wrap; }
