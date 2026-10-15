@@ -86,37 +86,43 @@
   <div class="container">
     <div class="sec-tag reveal">01 · kubectl get infra -o wide</div>
     <h2 class="sec-title reveal d1">Inside the hosting stack.</h2>
-    <p class="sec-sub reveal d2">This is a live simulation of how requests move through the Saarthix infrastructure. <b style="color:var(--cyan)">Click any node</b> to see what it does, then trigger an event from the <b style="color:var(--pink)">action panel</b> on the left and watch the platform <b style="color:var(--green)">respond</b> on the right.</p>
+    <p class="sec-sub reveal d2">This is a live simulation of how requests move through the Saarthix infrastructure. <b style="color:var(--cyan)">Click any node</b> to see what it does, then fire an <b style="color:var(--pink)">action</b> on the left and watch the <b style="color:var(--green)">response</b> on the right: live events, metrics and the state of every microservice.</p>
 
     <div class="arch-split" id="arch-split">
-      <!-- LEFT: actions -->
-      <aside class="glass arch-ctrl reveal">
-        <div class="panel-head"><span class="ph-t act">⌘ ACTIONS</span><span class="live">LIVE</span></div>
-        <p class="ctrl-sub">Pick an event to inject into production.</p>
+      <!-- LEFT: actions + topology map -->
+      <div class="glass arch-left neon reveal">
+        <div class="panel-head">
+          <span class="ph-t act">⌘ ACTIONS</span>
+          <div class="ctrl-status" id="ctrl-status"><i></i><span>idle · pick an event</span></div>
+        </div>
         <div id="arch-events"></div>
-        <div class="ctrl-status" id="ctrl-status"><i></i><span>idle · waiting for an action</span></div>
-      </aside>
-      <div class="arch-beam" aria-hidden="true"><i></i><i></i><i></i></div>
-      <!-- RIGHT: response -->
-      <div class="arch-resp">
-        <div class="glass arch-stage neon reveal d1">
-          <div class="panel-head"><span class="ph-t res">⇢ RESPONSE · LIVE TOPOLOGY</span><span class="ph-hint">click a node to inspect</span></div>
-          <div class="arch-canvas">
-            <div class="arch-banner" id="arch-banner"></div>
-            <svg id="arch-svg" viewBox="0 0 900 560"></svg>
-          </div>
+        <div class="panel-head map-head"><span class="ph-t">◈ LIVE TOPOLOGY</span><span class="ph-hint">click a node to inspect</span><span class="live">LIVE</span></div>
+        <div class="arch-canvas">
+          <div class="arch-banner" id="arch-banner"></div>
+          <svg id="arch-svg" viewBox="0 0 900 560"></svg>
         </div>
-        <div class="arch-side">
-          <div class="glass metrics reveal d1">
-            <div class="metric"><div class="m-lbl">REQ / SEC</div><div class="m-val ok" id="m-rps">0</div></div>
-            <div class="metric"><div class="m-lbl">P95 LATENCY</div><div class="m-val ok" id="m-lat">0ms</div></div>
-            <div class="metric"><div class="m-lbl">PODS RUNNING</div><div class="m-val ok" id="m-pods">0</div></div>
-            <div class="metric"><div class="m-lbl">ERROR RATE</div><div class="m-val ok" id="m-err">0%</div></div>
-            <canvas class="spark" id="spark"></canvas>
-          </div>
-          <div class="glass arch-log reveal d2" id="arch-log"></div>
-          <div class="glass inspector reveal d3" id="inspector"></div>
+      </div>
+      <!-- RIGHT: responses -->
+      <div class="arch-right">
+        <div class="glass metrics reveal d1">
+          <div class="metric"><div class="m-lbl">REQ / SEC</div><div class="m-val ok" id="m-rps">0</div></div>
+          <div class="metric"><div class="m-lbl">P95 LATENCY</div><div class="m-val ok" id="m-lat">0ms</div></div>
+          <div class="metric"><div class="m-lbl">PODS RUNNING</div><div class="m-val ok" id="m-pods">0</div></div>
+          <div class="metric"><div class="m-lbl">ERROR RATE</div><div class="m-val ok" id="m-err">0%</div></div>
+          <canvas class="spark" id="spark"></canvas>
         </div>
+        <div class="glass resp-term reveal d1">
+          <div class="term-top"><span class="d"></span><span class="d"></span><span class="d"></span><div class="title">response · kubectl get events -w</div></div>
+          <div class="arch-log" id="arch-log"></div>
+        </div>
+        <div class="glass svc-panel reveal d2">
+          <div class="panel-head"><span class="ph-t res">▤ MICROSERVICES</span><span class="ph-hint">ns: saarthix-prod</span></div>
+          <div class="svc-scroll"><table class="svc-table" id="svc-table">
+            <thead><tr><th>SERVICE</th><th>PODS</th><th>CPU</th><th>MEM</th><th>RPS</th><th>VERSION</th><th>STATUS</th></tr></thead>
+            <tbody></tbody>
+          </table></div>
+        </div>
+        <div class="glass inspector reveal d3" id="inspector"></div>
       </div>
     </div>
 

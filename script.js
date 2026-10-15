@@ -375,6 +375,8 @@ $$("[data-count]").forEach(el => statIO.observe(el));
     });
   }
   const svcs = ["s1", "s2", "s3", "s4"];
+  const SVC_META = { s1: { ver: "v2.4.1", mem: 310, share: .2 }, s2: { ver: "v3.9.0", mem: 420, share: .45 }, s3: { ver: "v1.7.3", mem: 380, share: .2 }, s4: { ver: "v1.2.8", mem: 190, share: .15 } };
+  svcs.forEach(k => Object.assign(N[k], SVC_META[k]));
   svcs.forEach(k => drawPods(N[k]));
 
   const ins = $("#inspector");
@@ -392,9 +394,11 @@ $$("[data-count]").forEach(el => statIO.observe(el));
   function log(msg, cls = "") {
     const d = document.createElement("div");
     d.className = cls;
-    d.textContent = `${new Date().toTimeString().slice(0, 8)} ${msg}`;
-    logEl.prepend(d);
-    while (logEl.children.length > 9) logEl.lastChild.remove();
+    d.innerHTML = cls === "cmd" ? "" : `<span class="ts">${new Date().toTimeString().slice(0, 8)}</span> `;
+    d.append(msg);
+    logEl.appendChild(d);
+    while (logEl.children.length > 60) logEl.firstChild.remove();
+    logEl.scrollTop = logEl.scrollHeight;
   }
 
   // ---- packets ----
@@ -455,12 +459,50 @@ $$("[data-count]").forEach(el => statIO.observe(el));
   const spark = $("#spark"), sctx = spark.getContext("2d");
   let sw = 0, sh = 0;
   new ResizeObserver(() => { sw = spark.width = spark.clientWidth; sh = spark.height = spark.clientHeight; }).observe(spark);
+  const tbody = $("#svc-table tbody");
+  const rows = {};
+  svcs.forEach(k => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td class="sv-n">${N[k].ic} ${N[k].t}</td><td class="sv-p"></td><td class="sv-c"></td><td class="sv-m"></td><td class="sv-r"></td><td class="sv-v"></td><td><span class="sv-s"></span></td>`;
+    tr.onclick = () => select(k);
+    tbody.appendChild(tr);
+    rows[k] = { tr, p: $(".sv-p", tr), c: $(".sv-c", tr), m: $(".sv-m", tr), r: $(".sv-r", tr), v: $(".sv-v", tr), s: $(".sv-s", tr) };
+  });
+  function svcStatus(n) {
+    const ps = n.podState;
+    if (n.g.classList.contains("down") || !ps.some(alive)) return ["CRITICAL", "bad"];
+    if (ps.includes("dead")) return ["DEGRADED", "warn"];
+    if (ps.includes("canary")) return ["CANARY", "pink"];
+    if (ps.includes("deploy")) return ["ROLLING", "vio"];
+    if (ps.includes("new")) return ["SCALING", "warn"];
+    return ["HEALTHY", "ok"];
+  }
+  function renderSvc(apiRps) {
+    svcs.forEach(k => {
+      const n = N[k], r = rows[k];
+      const up = n.podState.filter(alive).length, total = n.podState.length;
+      const rps = Math.round(apiRps * n.share);
+      const cpu = up ? Math.min(98, Math.round(rps / up * 1.6 + 12 + rand(-3, 3))) : 0;
+      const [st, cls] = svcStatus(n);
+      r.p.innerHTML = `<b>${up}/${total}</b> ${n.podState.map(p => `<i class="pd ${p}"></i>`).join("")}`;
+      r.c.innerHTML = `<span class="bar"><i style="width:${cpu}%" class="${cpu > 80 ? "hot" : cpu > 60 ? "warm" : ""}"></i></span>${cpu}%`;
+      r.m.textContent = up ? Math.round(n.mem * (.9 + cpu / 400) + rand(-6, 6)) + "Mi" : "-";
+      r.r.textContent = rps;
+      r.v.textContent = n.ver;
+      r.s.textContent = st; r.s.className = "sv-s " + cls;
+      r.tr.classList.toggle("flag", cls !== "ok");
+    });
+  }
+  renderSvc(59);
+  // metrics, table and event feed stay live while any part of the hosting panels is on screen
+  let splitOn = false;
+  new IntersectionObserver(([e]) => splitOn = e.isIntersecting).observe($("#arch-split"));
   function setM(id, val, cls) { const e = $(id); e.textContent = val; e.className = "m-val " + cls; }
   setInterval(() => {
     sim.load += (1 - sim.load) * .08;
     sim.errBoost *= .85;
     sim.latBoost *= .9;
-    if (!archVisible()) return;
+    if (!splitOn) return;
     const rps = Math.round(120 * sim.load + rand(-10, 10));
     const pods = svcs.reduce((s, k) => s + N[k].podState.filter(alive).length, 0);
     const lat = Math.round(38 + (sim.load - 1) * 40 / Math.max(1, pods / 8) + sim.latBoost + rand(-4, 4));
@@ -469,6 +511,7 @@ $$("[data-count]").forEach(el => statIO.observe(el));
     setM("#m-lat", lat + "ms", lat > 120 ? "bad" : lat > 70 ? "warn" : "ok");
     setM("#m-pods", pods, "ok");
     setM("#m-err", err + "%", err > 1 ? "bad" : err > .3 ? "warn" : "ok");
+    renderSvc(rps * .49);
     hist.push(rps); hist.shift();
     const w = sw, h = sh;
     sctx.clearRect(0, 0, w, h);
@@ -490,7 +533,7 @@ $$("[data-count]").forEach(el => statIO.observe(el));
     ["cert-manager: saarthix.com valid 61d", "g"], ["karpenter: 3 nodes, 71% bin-packed", ""],
   ];
   let busy = false;
-  setInterval(() => { if (archVisible() && !busy) { const [m, c] = pick(ambient); log(m, c); } }, 1400);
+  setInterval(() => { if (splitOn && !busy) { const [m, c] = pick(ambient); log(m, c); } }, 1400);
 
   // ---- helpers for events ----
   const bannerEl = $("#arch-banner");
@@ -613,7 +656,7 @@ $$("[data-count]").forEach(el => statIO.observe(el));
       for (const k of svcs) {
         const n = N[k];
         for (let i = 0; i < n.podState.length; i++) { n.podState[i] = "deploy"; drawPods(n); await sleep(300); n.podState[i] = "ok"; drawPods(n); }
-        log(`rollout: ${n.t} → ${v} (maxUnavailable=0)`);
+        n.ver = v; log(`rollout: ${n.t} → ${v} (maxUnavailable=0)`);
       }
       log("✔ rolling deploy complete, 0 dropped requests", "g"); banner("DEPLOYED · 0 DROPPED REQUESTS", "g");
     }],
@@ -628,11 +671,11 @@ $$("[data-count]").forEach(el => statIO.observe(el));
       for (let i = 0; i < 3; i++) { await sleep(350); setPods("s2", p => p.map((s, j) => j === i ? "canary" : s)); }
       await sleep(600);
       setPods("s2", p => p.slice(0, 3).map(() => "ok"));
-      log(`✔ jobs-svc ${v} fully promoted, old ReplicaSet scaled to 0`, "g"); banner("CANARY PROMOTED", "g");
+      N.s2.ver = v; log(`✔ jobs-svc ${v} fully promoted, old ReplicaSet scaled to 0`, "g"); banner("CANARY PROMOTED", "g");
     }],
     ["RELEASES", "↩ bad deploy → rollback", "alt", async () => {
       const v = sha(); select("s3"); banner(`DEPLOY RESUME-SVC ${v}`, "");
-      log(`rollout: resume-svc → ${v}`);
+      const prev = N.s3.ver; N.s3.ver = v; log(`rollout: resume-svc → ${v}`);
       for (let i = 0; i < N.s3.podState.length; i++) { await sleep(350); setPods("s3", p => p.map((s, j) => j === i ? "deploy" : s)); }
       await sleep(500);
       sim.errBoost = .18; mark("s3", "down"); mark("obs", "alert");
@@ -642,7 +685,7 @@ $$("[data-count]").forEach(el => statIO.observe(el));
       select("obs");
       await step(800, "auto-rollback: helm rollback resume-svc 127", "w");
       for (let i = 0; i < N.s3.podState.length; i++) { await sleep(350); setPods("s3", p => p.map((s, j) => j === i ? "ok" : s)); }
-      sim.errBoost = .01; mark("s3", "down", false); mark("obs", "alert", false);
+      N.s3.ver = prev; sim.errBoost = .01; mark("s3", "down", false); mark("obs", "alert", false);
       log("✔ rolled back in 41s, bad image quarantined", "g"); banner("ROLLED BACK · BUDGET PRESERVED", "g");
     }],
   ];
@@ -682,8 +725,9 @@ $$("[data-count]").forEach(el => statIO.observe(el));
       buttons.forEach(x => x.disabled = x !== b);
       b.classList.add("running"); split.classList.add("is-running");
       statusBox.className = "ctrl-status run"; status.textContent = `running · ${bare(label)}`;
+      log(`$ hariom-ops inject --event="${bare(label)}"`, "cmd");
       // stacked layout: bring the response into view
-      if (innerWidth <= 1000) $(".arch-stage").scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "start" });
+      if (innerWidth <= 1000) $(".arch-canvas").scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "start" });
       try { await fn(); } finally {
         hideBanner();
         b.classList.remove("running"); split.classList.remove("is-running");
