@@ -85,30 +85,39 @@
 }
 </script>
 
-<link rel="preload" href="/fonts/orbitron-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/space-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/styles.css?v=20261019b">
+<link rel="stylesheet" href="/styles.css?v=20261019c">
 </head>
-<body class="loading">
+<body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-gh" viewBox="0 0 16 16"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></symbol>
+  <symbol id="i-git" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="5" r="2"/><circle cx="6" cy="19" r="2"/><circle cx="18" cy="7" r="2"/><path d="M6 7v10M18 9c0 5-6 5-10 8"/></symbol>
+  <symbol id="i-lint" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h10M4 12h10M4 18h6"/><path d="M15 17l2.5 2.5L22 15"/></symbol>
+  <symbol id="i-test" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 1.7 3h10.6a2 2 0 0 0 1.7-3l-5-9V3"/><path d="M7.5 14h9"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/></symbol>
+  <symbol id="i-box" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8"/></symbol>
+  <symbol id="i-upload" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></symbol>
+  <symbol id="i-rocket" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 15c-1.5 1.5-2 5-2 5s3.5-.5 5-2"/><path d="M9 15l-3-3c1-4 4-8 11-9 0 7-5 10-9 11z"/><circle cx="14.5" cy="9.5" r="1.5"/></symbol>
+  <symbol id="i-pulse" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l3-8 4 16 3-8h4"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+  <symbol id="i-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-doc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></symbol>
+  <symbol id="i-compass" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/></symbol>
+  <symbol id="i-code" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 8l-4 4 4 4M16 8l4 4-4 4M13.5 5l-3 14"/></symbol>
+  <symbol id="i-cog" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2.5v3M12 18.5v3M4.6 4.6l2.1 2.1M17.3 17.3l2.1 2.1M2.5 12h3M18.5 12h3M4.6 19.4l2.1-2.1M17.3 6.7l2.1-2.1"/></symbol>
+  <symbol id="i-layers" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l9 5-9 5-9-5 9-5z"/><path d="M3 12.5l9 5 9-5"/><path d="M3 16.5l9 5 9-5"/></symbol>
+  <symbol id="i-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v17M8 20h8M5 7h14"/><path d="M5 7l-2.5 6a2.5 2.5 0 0 0 5 0zM19 7l-2.5 6a2.5 2.5 0 0 0 5 0z"/></symbol>
+  <symbol id="i-gate" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M12 3v18M9.5 12h.01M14.5 12h.01"/></symbol>
+  <symbol id="i-db" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5.5" rx="8" ry="2.5"/><path d="M4 5.5v13c0 1.4 3.6 2.5 8 2.5s8-1.1 8-2.5v-13"/><path d="M4 12c0 1.4 3.6 2.5 8 2.5s8-1.1 8-2.5"/></symbol>
   <symbol id="i-ext" viewBox="0 0 16 16"><path d="M9 2h5v5M14 2L7 9M12 9.5V14H2V4h4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
 </svg>
 
-<!-- Boot sequence -->
-<div id="boot">
-  <div>
-    <div id="boot-log"></div>
-    <div class="boot-bar"><i id="boot-fill"></i></div>
-  </div>
-</div>
-
-<canvas id="bg-canvas"></canvas>
 <div class="noise-glow a"></div>
 <div class="noise-glow b"></div>
-<div class="grid-floor"></div>
-<div class="scanlines"></div>
+<div class="dot-grid" aria-hidden="true"></div>
 <div id="progress"></div>
 
 <nav id="nav">
@@ -131,18 +140,18 @@
 <!-- ================= HERO ================= -->
 <section id="hero">
   <div class="container hero-grid">
-    <div>
-      <div class="hero-hello">&gt; whoami<span class="blink">_</span></div>
-      <h1 class="hero-h1"><span class="glitch" data-text="HARIOM SINGH">HARIOM SINGH</span><span class="h1-sub">DevOps Engineer Portfolio</span></h1>
-      <div class="hero-role" aria-hidden="true">~/$ <span class="typed" id="typed"></span><span class="caret"></span></div>
+    <div class="hero-copy">
+      <a class="hero-badge" href="#contact"><i aria-hidden="true"></i>Open to DevOps, Cloud &amp; SRE roles</a>
+      <h1 class="hero-h1"><span class="hero-name">Hariom Singh</span><span class="h1-sub">DevOps Engineer Portfolio</span></h1>
+      <p class="hero-role">I build <span class="rot-wrap"><span class="rot" id="typed">reliable</span></span> platforms.</p>
       <p class="hero-desc">
         I'm <b>Hariom Singh</b>, a <b>DevOps &amp; Cloud Engineer</b> and Project Engineer Lead at <b>Saarthix</b>.
         I hosted and run the whole Saarthix platform on my own: edge, load balancers, API gateways,
         containers, CI/CD and observability. I built it to be reliable and to cost as little as possible.
       </p>
       <div class="hero-cta">
-        <a href="#hosting" class="btn magnetic">▶ explore the infra</a>
-        <a href="https://www.linkedin.com/in/hariom2003/" target="_blank" rel="noopener" class="btn alt magnetic">⌁ linkedin</a>
+        <a href="#hosting" class="btn magnetic">Explore the infrastructure <svg class="bi"><use href="#i-arrow"/></svg></a>
+        <a href="https://www.linkedin.com/in/hariom2003/" target="_blank" rel="noopener" class="btn alt magnetic">LinkedIn</a>
       </div>
       <div class="hero-stats">
         <div class="stat"><div class="num" data-count="1" data-suffix=" man">1</div><div class="lbl">entire infra team</div></div>
@@ -151,14 +160,28 @@
         <div class="stat"><div class="num" data-count="0" data-suffix=" min">0</div><div class="lbl">deploy downtime</div></div>
       </div>
     </div>
-    <div class="orb-wrap" id="orb">
-      <div class="orb-ring"></div>
-      <div class="orb-ring r2"></div>
-      <div class="orb-ring r3"></div>
-      <div class="orb-core">
-        <svg viewBox="0 0 100 60" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round">
-          <path d="M25 30c0-10 8-18 18-18 14 0 20 36 34 36 10 0 18-8 18-18s-8-18-18-18c-14 0-20 36-34 36-10 0-18-8-18-18z" transform="translate(-10 0)"/>
-        </svg>
+    <div class="hero-visual" aria-hidden="true">
+      <div class="hv-card hv-main">
+        <div class="hv-top"><span class="hv-dot"></span>saarthix-prod<span class="hv-sim">simulated</span><span class="hv-pill">healthy</span></div>
+        <div class="hv-title">All systems operational</div>
+        <ul class="hv-rows">
+          <li><span><svg><use href="#i-globe"/></svg>Edge · Cloudflare</span><b>ok</b></li>
+          <li><span><svg><use href="#i-scale"/></svg>Load balancer</span><b>ok</b></li>
+          <li><span><svg><use href="#i-gate"/></svg>API gateway</span><b>ok</b></li>
+          <li><span><svg><use href="#i-box"/></svg>Services</span><b>4 / 4</b></li>
+          <li><span><svg><use href="#i-db"/></svg>Data</span><b>ok</b></li>
+        </ul>
+        <svg class="hv-spark" viewBox="0 0 300 60" preserveAspectRatio="none"><path class="hv-area" d="M0 44 C20 40 30 30 50 34 S80 46 100 38 130 18 150 24 180 40 200 32 230 12 250 18 280 30 300 22 V60 H0Z"/><path class="hv-line" d="M0 44 C20 40 30 30 50 34 S80 46 100 38 130 18 150 24 180 40 200 32 230 12 250 18 280 30 300 22"/></svg>
+        <div class="hv-foot"><span>p95 latency · last 24h</span></div>
+      </div>
+      <div class="hv-card hv-deploy">
+        <div class="hv-k">Deploy · main</div>
+        <div class="hv-v"><svg><use href="#i-check"/></svg>Shipped to production</div>
+        <div class="hv-bar"><i></i></div>
+      </div>
+      <div class="hv-card hv-pipe">
+        <div class="hv-k">Pipeline</div>
+        <div class="hv-steps"><span>lint</span><span>test</span><span>scan</span><span>build</span><span>deploy</span></div>
       </div>
     </div>
   </div>
@@ -171,7 +194,7 @@
   <div class="container dash-wrap">
     <div class="dash-head reveal">
       <div>
-        <div class="dash-tagrow"><div class="sec-tag">01 · kubectl get infra -o wide</div><a class="pill-link" href="/saarthix-case-study"><span aria-hidden="true">📄</span> How I built this: read the case study <i aria-hidden="true">→</i></a></div>
+        <div class="dash-tagrow"><div class="sec-tag">01 · kubectl get infra -o wide</div><a class="pill-link" href="/saarthix-case-study"><span aria-hidden="true"><svg><use href="#i-doc"/></svg></span> How I built this: read the case study <i aria-hidden="true">→</i></a></div>
         <h2 class="sec-title">Inside the hosting stack.</h2>
       </div>
       <p class="dash-how"><b class="c-pink">① Pick an action</b> <span>→</span> <b class="c-cyan">② watch the live map</b> <span>→</span> <b class="c-green">③ read the response</b></p>
@@ -230,14 +253,60 @@
   <div class="container">
     <div class="sec-tag reveal">02 · git push origin main</div>
     <h2 class="sec-title reveal d1">CI/CD: from commit to production.</h2>
-    <p class="sec-sub reveal d2">Every push runs through a pipeline: lint, test, scan, build, push, deploy, verify. It rolls back automatically if anything fails. Press the button to run it.</p>
-    <div class="glass pipe neon reveal">
-      <div class="pipe-head">
-        <div class="commit"><span class="sim-tag">simulated run</span> commit <b id="sha">a1b2c3d</b> · <span id="cmsg">feat: add job recommendations API</span></div>
-        <button class="btn" id="btn-run">▶ run pipeline</button>
+    <p class="sec-sub reveal d2">Every change I push goes through the same automated checks before it reaches users. If any check fails, the change stops and production stays safe. Ship a good commit, then try a broken one.</p>
+
+    <div class="glass pp neon reveal" id="pp">
+      <!-- commit + controls -->
+      <div class="pp-head">
+        <div class="pp-commit">
+          <span class="pp-avatar" aria-hidden="true"><svg><use href="#i-git"/></svg></span>
+          <div class="pp-cmeta">
+            <div class="pp-cline"><span class="sim-tag">simulated run</span><code id="sha">a1b2c3d</code><span class="pp-branch">main</span></div>
+            <div class="pp-cmsg" id="cmsg">feat: add job recommendations API</div>
+          </div>
+        </div>
+        <div class="pp-btns">
+          <button class="btn sm" id="btn-run" type="button"><svg class="bi"><use href="#i-check"/></svg>Ship a good commit</button>
+          <button class="btn sm alt" id="btn-fail" type="button"><svg class="bi"><use href="#i-x"/></svg>Ship a broken commit</button>
+        </div>
       </div>
-      <div class="stages" id="stages"></div>
-      <div class="pipe-term" id="pipe-term"><div class="term-bar"><span></span><span></span><span></span></div><div class="c">$ waiting for trigger…</div></div>
+
+      <!-- the track -->
+      <div class="pp-phases" aria-hidden="true">
+        <span style="--s:1;--e:3">Get the code</span>
+        <span style="--s:3;--e:5">Check quality</span>
+        <span style="--s:5;--e:7">Package</span>
+        <span style="--s:7;--e:9">Release</span>
+      </div>
+      <div class="pp-track" id="pp-track">
+        <div class="pp-rail"><i id="pp-fill"></i></div>
+        <div class="pp-cap" id="pp-cap" aria-hidden="true"><svg><use href="#i-box"/></svg><b id="pp-capsha">a1b2c3d</b></div>
+        <ol class="pp-steps" id="pp-steps"></ol>
+      </div>
+
+      <!-- explanation + log -->
+      <div class="pp-body">
+        <div class="pp-explain" aria-live="polite">
+          <div class="pp-ex-top"><span id="pp-ex-n">READY</span><span id="pp-ex-phase"></span></div>
+          <h3 id="pp-ex-title">Press a button to push a commit</h3>
+          <p id="pp-ex-what">The pipeline will take it from a <code>git push</code> all the way to live users, one automated step at a time.</p>
+          <p class="pp-why" id="pp-ex-why"><b>Why it matters:</b> no manual steps means every release is repeatable, and nothing broken reaches users.</p>
+          <div class="pp-progress"><i id="pp-prog"></i></div>
+        </div>
+        <div class="pipe-term pp-term" id="pipe-term"><div class="term-bar"><span></span><span></span><span></span></div><div class="c">$ waiting for a push to main…</div></div>
+      </div>
+
+      <!-- production -->
+      <div class="pp-prod" id="pp-prod">
+        <div class="pp-prod-l">
+          <span class="pp-env"><svg><use href="#i-globe"/></svg>Production</span>
+          <span class="pp-ver">live version <b id="pp-ver">v127</b></span>
+        </div>
+        <div class="pp-pods" id="pp-pods" role="img" aria-label="Four production servers"><i></i><i></i><i></i><i></i></div>
+        <div class="pp-prod-msg" id="pp-prod-msg">serving users · 0 errors</div>
+      </div>
+
+      <div class="pp-summary" id="pp-summary" hidden></div>
     </div>
   </div>
 </section>
@@ -342,7 +411,7 @@
     <!-- featured -->
     <article class="glass neon pfeat reveal" data-cat="devops">
       <div class="pfeat-body">
-        <div class="pf-kicker"><span class="pf-star">★</span> FEATURED · IN PRODUCTION</div>
+        <div class="pf-kicker">FEATURED · IN PRODUCTION</div>
         <h3>Saarthix platform hosting</h3>
         <p>I designed, hosted and run the entire Saarthix platform on my own, from DNS to database, built to stay reliable and cost as little as possible.</p>
         <ul class="pf-points">
@@ -359,11 +428,11 @@
       </div>
       <div class="pfeat-visual" aria-hidden="true">
         <div class="pv-line"><i></i></div>
-        <div class="pv-layer c"><span>🌐</span>Edge / CDN<em>DNS · WAF · TLS</em></div>
-        <div class="pv-layer c"><span>⚖</span>Load balancer<em>health-checked</em></div>
-        <div class="pv-layer v"><span>🚪</span>API gateway<em>auth · rate limits</em></div>
-        <div class="pv-layer v"><span>📦</span>Services<em>Spring Boot · React</em></div>
-        <div class="pv-layer g"><span>🗄</span>Data<em>DB · cache · storage</em></div>
+        <div class="pv-layer c"><span><svg><use href="#i-globe"/></svg></span>Edge / CDN<em>DNS · WAF · TLS</em></div>
+        <div class="pv-layer c"><span><svg><use href="#i-scale"/></svg></span>Load balancer<em>health-checked</em></div>
+        <div class="pv-layer v"><span><svg><use href="#i-gate"/></svg></span>API gateway<em>auth · rate limits</em></div>
+        <div class="pv-layer v"><span><svg><use href="#i-box"/></svg></span>Services<em>Spring Boot · React</em></div>
+        <div class="pv-layer g"><span><svg><use href="#i-db"/></svg></span>Data<em>DB · cache · storage</em></div>
       </div>
     </article>
 
@@ -477,7 +546,7 @@
       </article>
     </div>
     <a class="cs-banner glass reveal" href="/devops-engineer-portfolio">
-      <span class="csb-ic" aria-hidden="true">🧭</span>
+      <span class="csb-ic" aria-hidden="true"><svg><use href="#i-compass"/></svg></span>
       <span class="csb-body">
         <span class="csb-kicker">DEVOPS ENGINEER PORTFOLIO · BY SKILL AREA</span>
         <span class="csb-title">CI/CD, containers, cloud, monitoring and security, project by project</span>
@@ -496,15 +565,15 @@
     <h2 class="sec-title reveal d1">The Saarthix journey.</h2>
     <p class="sec-sub reveal d2">From the first commit to a production platform run by one person, in six steps.</p>
     <div class="journey reveal" id="journey-track"><div class="j-line"><i></i></div>
-      <div class="j-step" style="--i:0"><div class="j-node" aria-hidden="true">💻</div><div class="j-num">STEP 01</div><h3>Build</h3><p>Spring Boot microservices and a React frontend, built with deployment in mind from day one.</p><div class="j-tech">Java · React · Git</div></div>
-      <div class="j-step" style="--i:1"><div class="j-node" aria-hidden="true">🐳</div><div class="j-num">STEP 02</div><h3>Containerize</h3><p>Multi-stage Docker images and one compose file, so every environment is identical.</p><div class="j-tech">Docker · Compose</div></div>
-      <div class="j-step" style="--i:2"><div class="j-node" aria-hidden="true">⚙</div><div class="j-num">STEP 03</div><h3>Automate</h3><p>Terraform for the infrastructure and a CI/CD pipeline that tests, scans and ships on every push.</p><div class="j-tech">Terraform · Actions</div></div>
-      <div class="j-step" style="--i:3"><div class="j-node" aria-hidden="true">🌐</div><div class="j-num">STEP 04</div><h3>Expose</h3><p>CDN + WAF at the edge, an L7 load balancer, and an API gateway as the single front door.</p><div class="j-tech">CDN · Nginx · Kong</div></div>
-      <div class="j-step" style="--i:4"><div class="j-node" aria-hidden="true">☸</div><div class="j-num">STEP 05</div><h3>Orchestrate</h3><p>Kubernetes with autoscaling, self-healing pods and Prometheus/Grafana on everything.</p><div class="j-tech">K8s · Helm · Grafana</div></div>
-      <div class="j-step" style="--i:5"><div class="j-node" aria-hidden="true">💰</div><div class="j-num">STEP 06</div><h3>Harden & Optimize</h3><p>Least-privilege IAM, secrets in Vault, ARM/spot compute: secure, at the lowest possible cost.</p><div class="j-tech">IAM · Vault · FinOps</div></div>
+      <div class="j-step" style="--i:0"><div class="j-node" aria-hidden="true"><svg><use href="#i-code"/></svg></div><div class="j-num">STEP 01</div><h3>Build</h3><p>Spring Boot microservices and a React frontend, built with deployment in mind from day one.</p><div class="j-tech">Java · React · Git</div></div>
+      <div class="j-step" style="--i:1"><div class="j-node" aria-hidden="true"><svg><use href="#i-box"/></svg></div><div class="j-num">STEP 02</div><h3>Containerize</h3><p>Multi-stage Docker images and one compose file, so every environment is identical.</p><div class="j-tech">Docker · Compose</div></div>
+      <div class="j-step" style="--i:2"><div class="j-node" aria-hidden="true"><svg><use href="#i-cog"/></svg></div><div class="j-num">STEP 03</div><h3>Automate</h3><p>Terraform for the infrastructure and a CI/CD pipeline that tests, scans and ships on every push.</p><div class="j-tech">Terraform · Actions</div></div>
+      <div class="j-step" style="--i:3"><div class="j-node" aria-hidden="true"><svg><use href="#i-globe"/></svg></div><div class="j-num">STEP 04</div><h3>Expose</h3><p>CDN + WAF at the edge, an L7 load balancer, and an API gateway as the single front door.</p><div class="j-tech">CDN · Nginx · Kong</div></div>
+      <div class="j-step" style="--i:4"><div class="j-node" aria-hidden="true"><svg><use href="#i-layers"/></svg></div><div class="j-num">STEP 05</div><h3>Orchestrate</h3><p>Kubernetes with autoscaling, self-healing pods and Prometheus/Grafana on everything.</p><div class="j-tech">K8s · Helm · Grafana</div></div>
+      <div class="j-step" style="--i:5"><div class="j-node" aria-hidden="true"><svg><use href="#i-shield"/></svg></div><div class="j-num">STEP 06</div><h3>Harden & Optimize</h3><p>Least-privilege IAM, secrets in Vault, ARM/spot compute: secure, at the lowest possible cost.</p><div class="j-tech">IAM · Vault · FinOps</div></div>
     </div>
     <a class="cs-banner glass reveal" href="/saarthix-case-study">
-      <span class="csb-ic" aria-hidden="true">📄</span>
+      <span class="csb-ic" aria-hidden="true"><svg><use href="#i-doc"/></svg></span>
       <span class="csb-body">
         <span class="csb-kicker">CASE STUDY · ~9 MIN READ</span>
         <span class="csb-title">How I hosted the Saarthix platform solo at minimal cost</span>
@@ -554,10 +623,10 @@
 
     <!-- Areas of work -->
     <div class="layers" style="margin-top:32px">
-      <div class="glass layer reveal tilt"><div class="l-num">01</div><h3>🛡️ DevSecOps</h3><p>CI/CD with security built in: scanning containers, secrets and Kubernetes, tuning the WAF, IAM governance and compliance guardrails.</p></div>
-      <div class="glass layer reveal d1 tilt"><div class="l-num">02</div><h3>☁️ Cloud Engineering</h3><p>Secure, low-cost cloud environments on AWS and GCP: landing zones, networking, IAM, migrations and right-sizing compute.</p></div>
-      <div class="glass layer reveal d2 tilt"><div class="l-num">03</div><h3>📈 Site Reliability</h3><p>Keeping systems up with Kubernetes, observability stacks, incident handling, root cause analysis and automation that removes repetitive work.</p></div>
-      <div class="glass layer reveal d3 tilt"><div class="l-num">04</div><h3>🤖 Infra Automation</h3><p>Terraform, Ansible playbooks and Bash, Go and Python tooling that turn manual ops work into one command.</p></div>
+      <div class="glass layer reveal tilt"><div class="l-num">01</div><h3>DevSecOps</h3><p>CI/CD with security built in: scanning containers, secrets and Kubernetes, tuning the WAF, IAM governance and compliance guardrails.</p></div>
+      <div class="glass layer reveal d1 tilt"><div class="l-num">02</div><h3>Cloud Engineering</h3><p>Secure, low-cost cloud environments on AWS and GCP: landing zones, networking, IAM, migrations and right-sizing compute.</p></div>
+      <div class="glass layer reveal d2 tilt"><div class="l-num">03</div><h3>Site Reliability</h3><p>Keeping systems up with Kubernetes, observability stacks, incident handling, root cause analysis and automation that removes repetitive work.</p></div>
+      <div class="glass layer reveal d3 tilt"><div class="l-num">04</div><h3>Infra Automation</h3><p>Terraform, Ansible playbooks and Bash, Go and Python tooling that turn manual ops work into one command.</p></div>
     </div>
   </div>
 </section>
@@ -569,7 +638,7 @@
       <div class="sec-tag">09 · kubectl apply -f hire-me.yaml</div>
       <h2>Let's build<br>something <span>reliable</span>.</h2>
       <p>I'm open to DevOps, Cloud, SRE and Platform Engineering roles where reliability, security and automation matter.</p>
-      <a href="https://www.linkedin.com/in/hariom2003/" target="_blank" rel="noopener" class="btn magnetic">⌁ connect on linkedin</a>
+      <a href="https://www.linkedin.com/in/hariom2003/" target="_blank" rel="noopener" class="btn magnetic">Connect on LinkedIn</a>
       <div class="socials">
         <a class="btn sm alt magnetic" href="https://www.linkedin.com/in/hariom2003/" target="_blank" rel="noopener me">LinkedIn</a>
         <a class="btn sm magnetic" href="https://github.com/Hariom00027" target="_blank" rel="noopener me">GitHub</a>
@@ -593,6 +662,6 @@
   Hariom Singh · DevOps Engineer · built &amp; deployed with <span class="hb">♥</span> · <span id="yr"></span> · uptime: <span id="uptime">00:00:00</span>
 </footer>
 
-<script src="/script.js?v=20261019b" defer></script>
+<script src="/script.js?v=20261019c" defer></script>
 </body>
 </html>

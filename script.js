@@ -27,34 +27,8 @@ const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 const rand = (a, b) => a + Math.random() * (b - a);
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
-/* ---------------- Boot sequence ---------------- */
-(async function boot() {
-  const log = $("#boot-log"), fill = $("#boot-fill");
-  const lines = [
-    "[  0.000] HARIOM-OPS kernel 6.9.0-devops x86_64",
-    "[  0.112] mounting /dev/experience ............ <ok>",
-    "[  0.241] starting containerd ................. <ok>",
-    "[  0.380] kubelet: node hariom-ops Ready ...... <ok>",
-    "[  0.512] nginx: upstream pool healthy ........ <ok>",
-    "[  0.640] kong: gateway routes loaded ......... <ok>",
-    "[  0.771] prometheus: scraping 42 targets ..... <ok>",
-    "[  0.903] cost-optimizer: budget within SLO ... <ok>",
-    "[  1.020] launching portfolio.service ......... <ok>",
-  ];
-  // full boot once per visit; quick flash on reloads so content shows fast
-  let seen = false;
-  try { seen = sessionStorage.getItem("booted") === "1"; sessionStorage.setItem("booted", "1"); } catch (e) {}
-  if (reduced || seen) lines.length = 2;
-  for (let i = 0; i < lines.length; i++) {
-    log.innerHTML += lines[i].replace("<ok>", '<span class="ok">[ OK ]</span>') + "\n";
-    fill.style.width = ((i + 1) / lines.length) * 100 + "%";
-    await sleep(reduced || seen ? 40 : rand(45, 85));
-  }
-  await sleep(seen ? 50 : 150);
-  $("#boot").classList.add("done");
-  document.body.classList.remove("loading");
-  startTyping();
-})();
+/* ---------------- Start ---------------- */
+startTyping();
 
 /* ---------------- Visibility helpers ---------------- */
 // Run a rAF loop only while `el` is on screen (rAF already sleeps in hidden tabs).
@@ -78,60 +52,6 @@ function whenNear(sel, fn, margin = "100% 0px") {
 // The marquee sits outside those sections, so pause it explicitly when it scrolls away.
 const pauseIO = new IntersectionObserver(es => es.forEach(e => e.target.classList.toggle("paused", !e.isIntersecting)), { rootMargin: "150px" });
 $$(".marquee").forEach(s => pauseIO.observe(s));
-
-/* ---------------- Background particle network ---------------- */
-(function bg() {
-  const c = $("#bg-canvas"), ctx = c.getContext("2d");
-  let w = 0, h = 0, pts = [], mx = -9999, my = -9999, started = false;
-  const D = 130, D2 = D * D, R2 = 150 * 150;
-  const resize = (cw, ch) => {
-    w = c.width = Math.round(cw); h = c.height = Math.round(ch); // 1x backing store: plenty for soft particles
-    const n = Math.min(65, Math.floor((w * h) / 20000));
-    pts = Array.from({ length: n }, (_, i) => ({ x: rand(0, w), y: rand(0, h), vx: rand(-.3, .3), vy: rand(-.3, .3), r: rand(1, 2.2), pink: i % 7 === 0 }));
-  };
-  // The canvas is fixed to the viewport; ResizeObserver hands us its size after layout,
-  // so startup never forces a synchronous layout of the whole page.
-  let rt;
-  new ResizeObserver(([e]) => {
-    const { width, height } = e.contentRect;
-    if (!started) { started = true; resize(width, height); frame(); return; }
-    clearTimeout(rt); rt = setTimeout(() => resize(width, height), 150);
-  }).observe(c);
-  addEventListener("mousemove", e => { mx = e.clientX; my = e.clientY; }, { passive: true });
-  const alphas = [.06, .13, .22];
-  const lite = matchMedia("(max-width: 760px), (pointer: coarse)").matches; // phones: ~20fps is plenty for drifting dots
-  let tick = 0;
-  function frame() {
-    if (lite && tick++ % 3) { if (!reduced) requestAnimationFrame(frame); return; }
-    ctx.clearRect(0, 0, w, h);
-    for (const p of pts) {
-      p.x += p.vx; p.y += p.vy;
-      if (p.x < 0 || p.x > w) p.vx *= -1;
-      if (p.y < 0 || p.y > h) p.vy *= -1;
-      const dx = p.x - mx, dy = p.y - my, md2 = dx * dx + dy * dy;
-      if (md2 < R2 && md2 > 1) { const md = Math.sqrt(md2); p.x += dx / md * 1.2; p.y += dy / md * 1.2; }
-    }
-    // batch every line into 3 alpha buckets: 3 strokes per frame instead of hundreds
-    const buckets = [new Path2D(), new Path2D(), new Path2D()];
-    for (let i = 0; i < pts.length; i++) {
-      const a = pts[i];
-      for (let j = i + 1; j < pts.length; j++) {
-        const b = pts[j], dx = a.x - b.x, dy = a.y - b.y, d2 = dx * dx + dy * dy;
-        if (d2 < D2) {
-          const k = d2 < D2 * .2 ? 2 : d2 < D2 * .55 ? 1 : 0;
-          buckets[k].moveTo(a.x, a.y); buckets[k].lineTo(b.x, b.y);
-        }
-      }
-    }
-    ctx.lineWidth = .7;
-    for (let b = 0; b < 3; b++) { ctx.strokeStyle = `rgba(34,228,255,${alphas[b]})`; ctx.stroke(buckets[b]); }
-    const cyan = new Path2D(), pink = new Path2D();
-    for (const p of pts) { const P = p.pink ? pink : cyan; P.moveTo(p.x + p.r, p.y); P.arc(p.x, p.y, p.r, 0, 6.283); }
-    ctx.fillStyle = "rgba(34,228,255,.7)"; ctx.fill(cyan);
-    ctx.fillStyle = "rgba(255,62,165,.8)"; ctx.fill(pink);
-    if (!reduced) requestAnimationFrame(frame);
-  }
-})();
 
 /* ---------------- Custom cursor: targeting reticle ---------------- */
 (function cursor() {
@@ -250,16 +170,21 @@ const onScrollFns = [];
   links.forEach(a => a.onclick = () => $("#nav-links").classList.remove("open"));
 })();
 
-/* ---------------- Typing roles ---------------- */
+/* ---------------- Hero word rotation ---------------- */
 async function startTyping() {
   const el = $("#typed");
+  if (!el || reduced) return;
+  const words = ["reliable", "observable", "automated", "secure", "cost-efficient"];
   let i = 0;
   while (true) {
-    const word = CONFIG.roles[i++ % CONFIG.roles.length];
-    for (let k = 1; k <= word.length; k++) { el.textContent = word.slice(0, k); await sleep(55); }
-    await sleep(1600);
-    for (let k = word.length; k >= 0; k--) { el.textContent = word.slice(0, k); await sleep(25); }
-    await sleep(250);
+    await sleep(2600);
+    el.classList.add("out");
+    await sleep(420);
+    el.textContent = words[++i % words.length];
+    el.classList.remove("out");
+    el.classList.add("in");
+    await sleep(30);
+    el.classList.remove("in");
   }
 }
 
@@ -286,30 +211,6 @@ function countUp(el) {
 const statIO = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { countUp(e.target); statIO.unobserve(e.target); } }));
 $$("[data-count]").forEach(el => statIO.observe(el));
 
-/* ---------------- Hero orb items ---------------- */
-(function orb() {
-  const wrap = $("#orb");
-  const items = [["🐳", "Docker"], ["☸", "K8s"], ["☁", "AWS"], ["⚙", "CI/CD"], ["🔀", "Nginx"], ["📊", "Grafana"], ["🏗", "Terraform"], ["🦍", "Kong"]];
-  const els = items.map(([i, t]) => {
-    const d = document.createElement("div");
-    d.className = "orb-item"; d.innerHTML = `<div><i>${i}</i>${t}</div>`;
-    wrap.appendChild(d); return d;
-  });
-  let a = 0, R = 0;
-  const front = els.map(() => null);
-  new ResizeObserver(([e]) => R = e.contentRect.width * .47).observe(wrap);
-  rafWhileVisible(wrap, (t, dt) => {
-    els.forEach((el, k) => {
-      const ang = a + (k / els.length) * Math.PI * 2;
-      const z = Math.sin(ang);
-      el.style.transform = `translate3d(${Math.cos(ang) * R}px, ${z * R * .42}px, 0) scale(${.8 + (z + 1) * .15})`;
-      el.style.opacity = .55 + (z + 1) * .225;
-      if (front[k] !== z > 0) { front[k] = z > 0; el.style.zIndex = z > 0 ? 3 : 0; }
-    });
-    a += reduced ? 0 : .00025 * dt;
-  });
-})();
-
 /* ---------------- Marquee ---------------- */
 whenNear(".marquee", function marquee() {
   const words = ["AWS", "KUBERNETES", "TERRAFORM", "DOCKER", "NGINX", "KONG", "GITHUB ACTIONS", "JENKINS", "ARGOCD", "PROMETHEUS", "GRAFANA", "LOKI", "ANSIBLE", "HELM", "REDIS", "POSTGRESQL", "MONGODB", "VAULT", "TRIVY", "CLOUDFLARE", "GCP", "LINUX"];
@@ -335,21 +236,21 @@ whenNear(".marquee", function marquee() {
 whenNear("#hosting", function arch() {
   const svg = $("#arch-svg"), NS = "http://www.w3.org/2000/svg";
   const N = {
-    users: { x: 450, y: 38, ic: "👥", t: "Users", s: "web · mobile", role: "CLIENTS", d: "Students, recruiters and institutions reaching Saarthix from browsers and phones around the world.", li: ["HTTPS only (HSTS)", "Geo-distributed traffic", "Burst-heavy usage patterns"] },
-    cdn: { x: 450, y: 118, ic: "🌐", t: "Edge / CDN", s: "DNS · WAF · TLS", role: "EDGE LAYER", d: "Cloudflare/CDN edge in front of everything. It terminates TLS, caches static assets, blocks bad bots and absorbs DDoS.", li: ["WAF + bot rules", "Edge caching → less origin egress", "Auto TLS certificates", "DNS failover"] },
-    lb: { x: 450, y: 198, ic: "⚖", t: "Load Balancer", s: "nginx · L7", role: "TRAFFIC DISTRIBUTION", d: "Layer-7 load balancer with active health checks. Traffic only reaches healthy upstreams, and nodes drain cleanly during deploys.", li: ["least_conn balancing", "Active health checks", "Gzip / Brotli", "Zero-downtime reloads"] },
-    gw: { x: 320, y: 290, ic: "🦍", t: "API Gateway", s: "kong · routing", role: "SINGLE FRONT DOOR", d: "All API traffic goes through the gateway: routing to services, JWT validation, per-client rate limits, CORS and structured access logs.", li: ["Path-based routing", "Rate limiting / quotas", "Auth plugins (JWT)", "Request tracing IDs"] },
-    web: { x: 600, y: 290, ic: "⚛", t: "Frontend", s: "react · nginx", role: "STATIC SPA", d: "React SPA built in CI and served by a small Nginx container. Assets are fingerprinted, so the CDN can cache them indefinitely.", li: ["Immutable asset caching", "SPA fallback routing", "~20MB image"] },
-    s1: { x: 210, y: 390, ic: "🔐", t: "auth-svc", s: "spring boot", role: "MICROSERVICE", d: "Handles authentication, sessions and OAuth. Runs stateless with tokens, so it scales horizontally.", li: ["HPA on CPU", "Readiness probes", "Secrets from Vault"], pods: 2 },
-    s2: { x: 355, y: 390, ic: "💼", t: "jobs-svc", s: "spring boot", role: "MICROSERVICE", d: "Job listings, search and recommendations. It's the busiest service, so it gets the most aggressive autoscaling.", li: ["HPA 2 → 10 pods", "Redis read-through cache", "Rolling updates"], pods: 3 },
-    s3: { x: 500, y: 390, ic: "📄", t: "resume-svc", s: "spring boot", role: "MICROSERVICE", d: "Resume builder and file processing. Uploads go straight to object storage with pre-signed URLs.", li: ["Pre-signed uploads", "Async processing", "Memory-tuned JVM"], pods: 2 },
-    s4: { x: 645, y: 390, ic: "🔔", t: "notify-svc", s: "events · mail", role: "MICROSERVICE", d: "Email and notification fan-out from an event queue. Retries use exponential backoff.", li: ["Queue consumers", "Idempotent handlers", "DLQ on failure"], pods: 1 },
-    db: { x: 280, y: 505, ic: "🗄", t: "Database", s: "mongo · postgres", role: "DATA LAYER", d: "Primary datastore with automated backups, point-in-time recovery and connection pooling. It sits in private subnets only.", li: ["Daily snapshots + PITR", "Private subnet", "Connection pooling"] },
-    cache: { x: 460, y: 505, ic: "⚡", t: "Redis", s: "cache · sessions", role: "CACHE LAYER", d: "In-memory cache for hot reads and rate-limit counters. It takes most of the read load off the database.", li: ["TTL-based invalidation", "Rate-limit buckets", "~90% hit ratio target"] },
-    store: { x: 640, y: 505, ic: "🪣", t: "Object Store", s: "s3 · media", role: "STORAGE", d: "Resumes, images and backups in object storage with lifecycle rules that move cold data to cheaper tiers.", li: ["Lifecycle → cold tier", "Versioning", "Served via CDN"] },
-    ci: { x: 70, y: 198, ic: "⚙", t: "CI/CD", s: "github actions", role: "DELIVERY", d: "Every push is tested, scanned and built into an image, then rolled out to the cluster with automatic rollback.", li: ["Lint → Test → Scan → Build", "Trivy image scan", "Auto rollback"] },
-    reg: { x: 70, y: 290, ic: "📦", t: "Registry", s: "container images", role: "ARTIFACTS", d: "Versioned, scanned container images tagged by commit SHA. Lifecycle rules prune old tags to keep storage cheap.", li: ["Immutable SHA tags", "Scan on push", "Tag retention policy"] },
-    obs: { x: 790, y: 198, ic: "📊", t: "Observability", s: "prom · grafana", role: "MONITORING", d: "Prometheus scrapes every component, Grafana shows it, Loki collects logs, and Alertmanager pages on SLO burn.", li: ["Golden-signal dashboards", "Log aggregation", "SLO alerting"] },
+    users: { x: 450, y: 38, code: "USR", t: "Users", s: "web · mobile", role: "CLIENTS", d: "Students, recruiters and institutions reaching Saarthix from browsers and phones around the world.", li: ["HTTPS only (HSTS)", "Geo-distributed traffic", "Burst-heavy usage patterns"] },
+    cdn: { x: 450, y: 118, code: "CDN", t: "Edge / CDN", s: "DNS · WAF · TLS", role: "EDGE LAYER", d: "Cloudflare/CDN edge in front of everything. It terminates TLS, caches static assets, blocks bad bots and absorbs DDoS.", li: ["WAF + bot rules", "Edge caching → less origin egress", "Auto TLS certificates", "DNS failover"] },
+    lb: { x: 450, y: 198, code: "LB", t: "Load Balancer", s: "nginx · L7", role: "TRAFFIC DISTRIBUTION", d: "Layer-7 load balancer with active health checks. Traffic only reaches healthy upstreams, and nodes drain cleanly during deploys.", li: ["least_conn balancing", "Active health checks", "Gzip / Brotli", "Zero-downtime reloads"] },
+    gw: { x: 320, y: 290, code: "API", t: "API Gateway", s: "kong · routing", role: "SINGLE FRONT DOOR", d: "All API traffic goes through the gateway: routing to services, JWT validation, per-client rate limits, CORS and structured access logs.", li: ["Path-based routing", "Rate limiting / quotas", "Auth plugins (JWT)", "Request tracing IDs"] },
+    web: { x: 600, y: 290, code: "WEB", t: "Frontend", s: "react · nginx", role: "STATIC SPA", d: "React SPA built in CI and served by a small Nginx container. Assets are fingerprinted, so the CDN can cache them indefinitely.", li: ["Immutable asset caching", "SPA fallback routing", "~20MB image"] },
+    s1: { x: 210, y: 390, code: "SVC", t: "auth-svc", s: "spring boot", role: "MICROSERVICE", d: "Handles authentication, sessions and OAuth. Runs stateless with tokens, so it scales horizontally.", li: ["HPA on CPU", "Readiness probes", "Secrets from Vault"], pods: 2 },
+    s2: { x: 355, y: 390, code: "SVC", t: "jobs-svc", s: "spring boot", role: "MICROSERVICE", d: "Job listings, search and recommendations. It's the busiest service, so it gets the most aggressive autoscaling.", li: ["HPA 2 → 10 pods", "Redis read-through cache", "Rolling updates"], pods: 3 },
+    s3: { x: 500, y: 390, code: "SVC", t: "resume-svc", s: "spring boot", role: "MICROSERVICE", d: "Resume builder and file processing. Uploads go straight to object storage with pre-signed URLs.", li: ["Pre-signed uploads", "Async processing", "Memory-tuned JVM"], pods: 2 },
+    s4: { x: 645, y: 390, code: "SVC", t: "notify-svc", s: "events · mail", role: "MICROSERVICE", d: "Email and notification fan-out from an event queue. Retries use exponential backoff.", li: ["Queue consumers", "Idempotent handlers", "DLQ on failure"], pods: 1 },
+    db: { x: 280, y: 505, code: "DB", t: "Database", s: "mongo · postgres", role: "DATA LAYER", d: "Primary datastore with automated backups, point-in-time recovery and connection pooling. It sits in private subnets only.", li: ["Daily snapshots + PITR", "Private subnet", "Connection pooling"] },
+    cache: { x: 460, y: 505, code: "KV", t: "Redis", s: "cache · sessions", role: "CACHE LAYER", d: "In-memory cache for hot reads and rate-limit counters. It takes most of the read load off the database.", li: ["TTL-based invalidation", "Rate-limit buckets", "~90% hit ratio target"] },
+    store: { x: 640, y: 505, code: "OBJ", t: "Object Store", s: "s3 · media", role: "STORAGE", d: "Resumes, images and backups in object storage with lifecycle rules that move cold data to cheaper tiers.", li: ["Lifecycle → cold tier", "Versioning", "Served via CDN"] },
+    ci: { x: 70, y: 198, code: "CI", t: "CI/CD", s: "github actions", role: "DELIVERY", d: "Every push is tested, scanned and built into an image, then rolled out to the cluster with automatic rollback.", li: ["Lint → Test → Scan → Build", "Trivy image scan", "Auto rollback"] },
+    reg: { x: 70, y: 290, code: "REG", t: "Registry", s: "container images", role: "ARTIFACTS", d: "Versioned, scanned container images tagged by commit SHA. Lifecycle rules prune old tags to keep storage cheap.", li: ["Immutable SHA tags", "Scan on push", "Tag retention policy"] },
+    obs: { x: 790, y: 198, code: "OBS", t: "Observability", s: "prom · grafana", role: "MONITORING", d: "Prometheus scrapes every component, Grafana shows it, Loki collects logs, and Alertmanager pages on SLO burn.", li: ["Golden-signal dashboards", "Log aggregation", "SLO alerting"] },
   };
   const links = [["users", "cdn"], ["cdn", "lb"], ["lb", "gw"], ["lb", "web"], ["gw", "s1"], ["gw", "s2"], ["gw", "s3"], ["gw", "s4"], ["s1", "db"], ["s2", "db"], ["s2", "cache"], ["s3", "store"], ["s3", "db"], ["s4", "cache"], ["ci", "reg"], ["reg", "s1"]];
   const mon = [["obs", "web"], ["obs", "s4"], ["obs", "lb"], ["obs", "cdn"]];
@@ -378,7 +279,8 @@ whenNear("#hosting", function arch() {
     const n = N[k];
     const g = el("g", { class: "node", transform: `translate(${n.x - W / 2},${n.y - H / 2})` }, nodeG);
     el("rect", { class: "box", width: W, height: H, rx: 10 }, g);
-    el("text", { class: "ic", x: 20, y: 31 }, g).textContent = n.ic;
+    el("rect", { class: "badge", x: 8, y: 13, width: 26, height: 24, rx: 6 }, g);
+    el("text", { class: "ic", x: 21, y: 28.5 }, g).textContent = n.code;
     const t1 = el("text", { x: 72, y: 22 }, g); t1.textContent = n.t;
     const t2 = el("text", { x: 72, y: 36, class: "sub" }, g); t2.textContent = n.s; n.subEl = t2;
     n.g = g;
@@ -406,7 +308,7 @@ ${n.d}`;
     const n = N[k];
     $$(".node", svg).forEach(g => g.classList.remove("sel"));
     n.g.classList.add("sel");
-    if (ins) ins.innerHTML = `${n.ic} ${n.t}`;
+    if (ins) ins.textContent = n.t;
   }
   select("lb");
 
@@ -484,7 +386,7 @@ ${n.d}`;
   const rows = {};
   svcs.forEach(k => {
     const tr = document.createElement("tr");
-    tr.innerHTML = `<td class="sv-n">${N[k].ic} ${N[k].t}</td><td class="sv-p"></td><td class="sv-c"></td><td><span class="sv-s"></span></td>`;
+    tr.innerHTML = `<td class="sv-n">${N[k].t}</td><td class="sv-p"></td><td class="sv-c"></td><td><span class="sv-s"></span></td>`;
     tr.onclick = () => { select(k); describe(k); };
     tbody.appendChild(tr);
     rows[k] = { tr, p: $(".sv-p", tr), c: $(".sv-c", tr), s: $(".sv-s", tr) };
@@ -563,7 +465,7 @@ ${n.d}`;
     bannerEl.textContent = text;
   }
   const hideBanner = (ms = 1800) => { bannerT = setTimeout(() => bannerEl.classList.remove("show"), ms); };
-  describe = k => { if (busy) return; banner(`${N[k].ic} ${N[k].t.toUpperCase()} · ${N[k].role}`); hideBanner(2600); };
+  describe = k => { if (busy) return; banner(`${N[k].t.toUpperCase()} · ${N[k].role}`); hideBanner(2600); };
   const mark = (k, cls, on = true) => N[k].g.classList.toggle(cls, on);
   const setSub = (k, txt) => { N[k].subEl.textContent = txt; };
   function shock(k) {
@@ -739,7 +641,7 @@ ${n.d}`;
     b.className = `ev-item ${cls}`;
     b.dataset.cursor = bare(label);
     b.title = DESC[label] || "";
-    b.innerHTML = `<span class="ev-t">${label}</span><span class="ev-go">▶</span>`;
+    b.innerHTML = `<span class="ev-t">${bare(label)}</span><svg class="ev-go"><use href="#i-arrow"/></svg>`;
     b.onclick = async () => {
       if (busy) return;
       busy = true;
@@ -764,47 +666,97 @@ ${n.d}`;
 
 /* ---------------- CI/CD pipeline ---------------- */
 whenNear("#pipeline", function pipeline() {
+  // [icon, name, phase, plain-English "what", "why it matters", log lines]
   const S = [
-    ["📥", "checkout", [["c", "$ git clone --depth=1 saarthix/platform"], ["", "Receiving objects: 100% (1824/1824) done"]]],
-    ["🧹", "lint", [["c", "$ ./gradlew spotlessCheck && npm run lint"], ["g", "✔ 0 problems found"]]],
-    ["🧪", "test", [["c", "$ ./gradlew test && npm test -- --ci"], ["", "Tests: 214 passed, 214 total"], ["g", "✔ coverage 81.4%"]]],
-    ["🛡", "security", [["c", "$ trivy fs . && gitleaks detect && tfsec infra/"], ["a", "⚠ 0 CRITICAL · 0 HIGH · secrets: none"], ["g", "✔ security gate passed"]]],
-    ["🐳", "build", [["c", "$ docker buildx build --platform linux/arm64,linux/amd64"], ["", "=> exporting layers 3.2s"], ["g", "✔ image size 148MB (multi-stage)"]]],
-    ["📦", "push", [["c", "$ docker push registry/saarthix/jobs-svc:$SHA"], ["g", "✔ pushed digest sha256:9f2c…"]]],
-    ["🚀", "deploy", [["c", "$ helm upgrade --install jobs-svc ./chart --atomic"], ["", "Waiting for rollout… 3/3 pods updated"], ["g", "✔ release revision 128 deployed"]]],
-    ["🔍", "verify", [["c", "$ ./smoke.sh https://api.saarthix.com/health"], ["g", "✔ 200 OK · p95 41ms · error budget intact"]]],
+    ["git", "Checkout", "Get the code", "Grab the exact commit that was just pushed, so every later step works on the same code.", "Builds are reproducible: the same commit always produces the same result.",
+      [["c", "$ git clone --depth=1 saarthix/platform && git checkout $SHA"], ["", "Receiving objects: 100% (1824/1824), done"]]],
+    ["lint", "Lint", "Get the code", "Check code style and catch obvious mistakes (typos, unused code, bad formatting) in seconds.", "Cheap problems are caught before any expensive step runs.",
+      [["c", "$ ./gradlew spotlessCheck && npm run lint"], ["g", "✔ 0 problems found"]]],
+    ["test", "Test", "Check quality", "Run the automated test suite to prove the new code works and nothing old broke.", "Bugs are stopped here, not discovered by users.",
+      [["c", "$ ./gradlew test && npm test -- --ci"], ["", "Tests: 214 passed, 214 total"], ["g", "✔ coverage 81.4%"]]],
+    ["shield", "Security scan", "Check quality", "Scan dependencies and code for known vulnerabilities and accidentally committed secrets.", "Security is checked on every change, automatically.",
+      [["c", "$ trivy fs . && gitleaks detect"], ["", "0 CRITICAL · 0 HIGH · secrets: none"], ["g", "✔ security gate passed"]]],
+    ["box", "Build image", "Package", "Package the app and everything it needs into a Docker image, the same artifact for every environment.", "\"Works on my machine\" disappears: what was tested is what ships.",
+      [["c", "$ docker build -t jobs-svc:$SHA ."], ["", "=> exporting layers 3.2s"], ["g", "✔ image built (multi-stage, 148MB)"]]],
+    ["upload", "Push", "Package", "Store the image in the registry, tagged with the commit ID so every release can be traced.", "Any version can be redeployed or rolled back in seconds.",
+      [["c", "$ docker push registry/saarthix/jobs-svc:$SHA"], ["g", "✔ pushed sha256:9f2c…"]]],
+    ["rocket", "Deploy", "Release", "Roll the new version out one server at a time; old servers keep serving until new ones are healthy.", "Users never see downtime during a release.",
+      [["c", "$ rolling update jobs-svc → $SHA (maxUnavailable=0)"], ["", "server 1/4 … 4/4 updated"], ["g", "✔ rollout complete"]]],
+    ["pulse", "Verify", "Release", "Hit the live health checks and key endpoints; if anything looks wrong, roll back automatically.", "A bad release is undone by the pipeline, not at 2 a.m. by a human.",
+      [["c", "$ ./smoke.sh https://api.saarthix.com/health"], ["g", "✔ 200 OK · p95 41ms · error budget intact"]]],
   ];
-  const wrap = $("#stages");
-  wrap.innerHTML = S.map(([ic, n], i) => `${i ? '<div class="connector"><i></i></div>' : ""}<div class="stage"><div class="s-ic">${ic}</div><div class="s-name">${n}</div><div class="s-time"></div></div>`).join("");
-  const stages = $$(".stage", wrap), conns = $$(".connector", wrap), term = $("#pipe-term");
-  const msgs = ["feat: add job recommendations API", "fix: resume upload timeout", "perf: cache hot job queries in redis", "chore: bump spring boot to 3.3", "feat: institution dashboard"];
+  const FAIL_AT = 2; // the broken commit fails its tests
+  const failLogs = [["c", "$ ./gradlew test && npm test -- --ci"], ["", "Tests: 213 passed, 1 failed, 214 total"], ["e", "✗ JobServiceTest > recommendations_returnTop5 FAILED"], ["e", "✗ pipeline stopped: tests failed, nothing was deployed"]];
+  const msgs = ["feat: add job recommendations API", "fix: resume upload timeout", "perf: cache hot job queries in redis", "feat: institution dashboard"];
+  const badMsgs = ["feat: new ranking for job matches (forgot to update a test)", "refactor: job search query (breaks top-5 results)"];
+
+  const list = $("#pp-steps"), track = $("#pp-track"), cap = $("#pp-cap"), fill = $("#pp-fill"), term = $("#pipe-term");
+  const prog = $("#pp-prog"), pods = $$("#pp-pods i"), prod = $("#pp-prod"), prodMsg = $("#pp-prod-msg"), ver = $("#pp-ver"), sum = $("#pp-summary");
+  list.innerHTML = S.map(([ic, name], i) => `<li class="pp-step" style="--i:${i}"><span class="pp-node"><svg class="pp-ic" aria-hidden="true"><use href="#i-${ic}"/></svg><svg class="pp-ok" aria-hidden="true"><use href="#i-check"/></svg><svg class="pp-x" aria-hidden="true"><use href="#i-x"/></svg></span><span class="pp-name">${name}</span><span class="pp-time"></span></li>`).join("");
+  const steps = $$(".pp-step", list);
+  const N = S.length, xAt = i => ((i + .5) / N) * 100;
   const out = (t, c = "") => { const d = document.createElement("div"); d.className = c; d.textContent = t; term.appendChild(d); term.scrollTop = term.scrollHeight; };
-  let running = false;
-  async function run() {
+  const explain = (n, phase, title, what, why) => { $("#pp-ex-n").textContent = n; $("#pp-ex-phase").textContent = phase; $("#pp-ex-title").textContent = title; $("#pp-ex-what").textContent = what; $("#pp-ex-why").innerHTML = why ? `<b>Why it matters:</b> ${why}` : ""; };
+  const moveCap = i => { cap.style.setProperty("--x", xAt(i) + "%"); };
+  let running = false, version = 127;
+
+  async function run(broken) {
     if (running) return; running = true;
-    const btn = $("#btn-run"); btn.disabled = true;
-    stages.forEach(s => { s.className = "stage"; $(".s-time", s).textContent = ""; });
-    conns.forEach(c => c.classList.remove("ok"));
-    $("#sha").textContent = Math.random().toString(16).slice(2, 9);
-    $("#cmsg").textContent = msgs[Math.floor(Math.random() * msgs.length)];
+    const btns = [$("#btn-run"), $("#btn-fail")]; btns.forEach(b => b.disabled = true);
+    const sha = Math.random().toString(16).slice(2, 9);
+    $("#sha").textContent = sha; $("#pp-capsha").textContent = sha;
+    $("#cmsg").textContent = (broken ? badMsgs : msgs)[Math.floor(Math.random() * (broken ? badMsgs : msgs).length)];
+    steps.forEach(s => { s.className = "pp-step"; $(".pp-time", s).textContent = ""; });
+    track.className = "pp-track"; prod.className = "pp-prod"; sum.hidden = true;
+    fill.style.setProperty("--p", 0); prog.style.transform = "scaleX(0)";
+    cap.className = "pp-cap in"; moveCap(0);
+    prodMsg.textContent = `serving users · v${version} live`;
     term.innerHTML = '<div class="term-bar"><span></span><span></span><span></span></div>';
-    out(`▶ workflow "deploy-prod" triggered by push to main`, "p");
+    out(`▶ push to main by hariom · commit ${sha}`, "p");
     const t0 = performance.now();
-    for (let i = 0; i < S.length; i++) {
-      stages[i].classList.add("run");
-      out(`── stage: ${S[i][1]} ──`, "a");
+    for (let i = 0; i < N; i++) {
+      const [, name, phase, what, why, logs] = S[i];
+      moveCap(i);
+      steps[i].classList.add("run");
+      explain(`STEP ${i + 1} / ${N}`, phase.toUpperCase(), name, what, why);
+      out(`── ${name.toLowerCase()} ──`, "a");
       const ts = performance.now();
-      for (const [c, l] of S[i][2]) { await sleep(rand(250, 550)); out(l, c); }
-      stages[i].classList.replace("run", "ok");
-      $(".s-time", stages[i]).textContent = ((performance.now() - ts) / 1000 * 7).toFixed(0) + "s";
-      if (conns[i]) conns[i].classList.add("ok");
+      const failing = broken && i === FAIL_AT;
+      for (const [c, l] of (failing ? failLogs : logs)) { await sleep(rand(320, 600)); out(l.replace("$SHA", sha), c); }
+      if (failing) {
+        steps[i].classList.replace("run", "fail"); cap.classList.add("fail"); track.classList.add("failed"); prod.classList.add("safe");
+        explain("STOPPED", "CHECK QUALITY", "A test failed, so the pipeline stopped", "The broken commit never got past testing. Nothing was built, pushed or deployed.", `production is still running v${version}, untouched. The developer fixes the test and pushes again.`);
+        prodMsg.textContent = `change blocked · still serving v${version} · users unaffected`;
+        showSummary([["⛔", "blocked at", "Test"], ["🧪", "tests", "213 / 214"], ["🌍", "production", `v${version} untouched`], ["⏱", "feedback in", ((performance.now() - t0) / 1000 * 7 / 60).toFixed(1) + " min"]], true);
+        break;
+      }
+      if (name === "Deploy") {
+        for (const p of pods) { p.className = "new"; await sleep(260); }
+        version++; ver.textContent = "v" + version; ver.animate([{ transform: "scale(1.4)", color: "#3dffa8" }, { transform: "none" }], { duration: 500 });
+        prodMsg.textContent = `rolled out v${version} · 0 requests dropped`;
+      }
+      steps[i].classList.replace("run", "ok");
+      $(".pp-time", steps[i]).textContent = ((performance.now() - ts) / 1000 * 7).toFixed(0) + "s";
+      fill.style.setProperty("--p", (i + 1) / N); prog.style.transform = `scaleX(${(i + 1) / N})`;
     }
-    out(`★ pipeline succeeded in ${((performance.now() - t0) / 1000 * 7 / 60).toFixed(1)} min, shipped to production`, "g");
-    btn.disabled = false; running = false;
+    if (!track.classList.contains("failed")) {
+      cap.classList.add("done"); prod.classList.add("live");
+      explain("SHIPPED ✓", "IN PRODUCTION", `Commit ${sha} is live`, "Every check passed, the new version rolled out server by server, and the health checks confirmed it.", "from git push to users in minutes, with zero downtime and no manual steps.");
+      out(`★ shipped to production in ${((performance.now() - t0) / 1000 * 7 / 60).toFixed(1)} min`, "g");
+      showSummary([["⏱", "total time", ((performance.now() - t0) / 1000 * 7 / 60).toFixed(1) + " min"], ["🧪", "tests", "214 / 214"], ["🛡", "vulnerabilities", "0"], ["⬇", "downtime", "0 s"]], false);
+      setTimeout(() => pods.forEach(p => p.className = ""), 1600);
+    }
+    btns.forEach(b => b.disabled = false); running = false;
   }
-  $("#btn-run").onclick = run;
-  const pipeIO = new IntersectionObserver(es => { if (es[0].isIntersecting) { run(); pipeIO.disconnect(); } }, { threshold: .4 });
-  pipeIO.observe($(".pipe"));
+  function showSummary(items, bad) {
+    sum.className = "pp-summary" + (bad ? " bad" : "");
+    sum.innerHTML = items.map(([, l, v]) => `<div><em>${l}</em><b>${v}</b></div>`).join("");
+    sum.hidden = false;
+  }
+  $("#btn-run").onclick = () => run(false);
+  $("#btn-fail").onclick = () => run(true);
+  const pipeIO = new IntersectionObserver(es => { if (es[0].isIntersecting) { run(false); pipeIO.disconnect(); } }, { threshold: .35 });
+  pipeIO.observe($("#pp"));
 });
 
 /* ---------------- Cost chart ---------------- */
