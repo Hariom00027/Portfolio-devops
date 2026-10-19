@@ -4,6 +4,7 @@
 
 ## Pages
 
+- [About Hariom Singh](https://hariomsinghdevops.prsoftwares.in/about-hariom-singh): who Hariom Singh is, his experience at Saarthix, skills, projects and contact.
 - [DevOps Engineer Portfolio](https://hariomsinghdevops.prsoftwares.in/devops-engineer-portfolio): projects grouped by CI/CD, infrastructure as code, containers, cloud and edge, monitoring and security, with an FAQ.
 - [Saarthix DevOps case study](https://hariomsinghdevops.prsoftwares.in/saarthix-case-study): how one engineer hosted a production platform layer by layer on a startup budget.
 - [Interactive portfolio](https://hariomsinghdevops.prsoftwares.in/): live hosting-stack simulation, CI/CD pipeline demo, skills and all projects.

@@ -870,3 +870,16 @@ main > section { scroll-margin-top: 12px; }
 .dp-faq details p { margin: 0 0 16px; }
 @media (max-width: 760px) { .dp-grid { grid-template-columns: 1fr 1fr; } }
 .cs nav.dp-grid { position: static; padding: 0; border: 0; background: none; z-index: auto; }
+
+/* ---------- About page ---------- */
+.ab-role { font-family: var(--mono); font-size: 14px; letter-spacing: 1px; color: var(--cyan); margin: -4px 0 18px; }
+.ab-links { display: flex; flex-wrap: wrap; gap: 10px; margin: 6px 0 10px; }
+.cs .ab-links a { text-decoration: none; }
+.ab-exp { padding: 20px 22px 8px; border-radius: 14px; }
+.ab-exp-head { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+.ab-exp-head b { font-family: var(--display); font-size: 18px; color: #fff; }
+.ab-exp-head span { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+.ab-more { font-size: 14px; }
+.ab-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.ab-inline { display: inline-block; margin-top: 6px; font-family: var(--mono); font-size: 13px; color: var(--cyan); border-bottom: 1px dashed rgba(34,228,255,.5); }
+.ab-inline:hover { color: #fff; }
