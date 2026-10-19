@@ -236,53 +236,58 @@ whenNear(".marquee", function marquee() {
 whenNear("#hosting", function arch() {
   const svg = $("#arch-svg"), NS = "http://www.w3.org/2000/svg";
   const N = {
-    users: { x: 450, y: 38, code: "USR", t: "Users", s: "web · mobile", role: "CLIENTS", d: "Students, recruiters and institutions reaching Saarthix from browsers and phones around the world.", li: ["HTTPS only (HSTS)", "Geo-distributed traffic", "Burst-heavy usage patterns"] },
-    cdn: { x: 450, y: 118, code: "CDN", t: "Edge / CDN", s: "DNS · WAF · TLS", role: "EDGE LAYER", d: "Cloudflare/CDN edge in front of everything. It terminates TLS, caches static assets, blocks bad bots and absorbs DDoS.", li: ["WAF + bot rules", "Edge caching → less origin egress", "Auto TLS certificates", "DNS failover"] },
-    lb: { x: 450, y: 198, code: "LB", t: "Load Balancer", s: "nginx · L7", role: "TRAFFIC DISTRIBUTION", d: "Layer-7 load balancer with active health checks. Traffic only reaches healthy upstreams, and nodes drain cleanly during deploys.", li: ["least_conn balancing", "Active health checks", "Gzip / Brotli", "Zero-downtime reloads"] },
-    gw: { x: 320, y: 290, code: "API", t: "API Gateway", s: "kong · routing", role: "SINGLE FRONT DOOR", d: "All API traffic goes through the gateway: routing to services, JWT validation, per-client rate limits, CORS and structured access logs.", li: ["Path-based routing", "Rate limiting / quotas", "Auth plugins (JWT)", "Request tracing IDs"] },
-    web: { x: 600, y: 290, code: "WEB", t: "Frontend", s: "react · nginx", role: "STATIC SPA", d: "React SPA built in CI and served by a small Nginx container. Assets are fingerprinted, so the CDN can cache them indefinitely.", li: ["Immutable asset caching", "SPA fallback routing", "~20MB image"] },
-    s1: { x: 210, y: 390, code: "SVC", t: "auth-svc", s: "spring boot", role: "MICROSERVICE", d: "Handles authentication, sessions and OAuth. Runs stateless with tokens, so it scales horizontally.", li: ["HPA on CPU", "Readiness probes", "Secrets from Vault"], pods: 2 },
-    s2: { x: 355, y: 390, code: "SVC", t: "jobs-svc", s: "spring boot", role: "MICROSERVICE", d: "Job listings, search and recommendations. It's the busiest service, so it gets the most aggressive autoscaling.", li: ["HPA 2 → 10 pods", "Redis read-through cache", "Rolling updates"], pods: 3 },
-    s3: { x: 500, y: 390, code: "SVC", t: "resume-svc", s: "spring boot", role: "MICROSERVICE", d: "Resume builder and file processing. Uploads go straight to object storage with pre-signed URLs.", li: ["Pre-signed uploads", "Async processing", "Memory-tuned JVM"], pods: 2 },
-    s4: { x: 645, y: 390, code: "SVC", t: "notify-svc", s: "events · mail", role: "MICROSERVICE", d: "Email and notification fan-out from an event queue. Retries use exponential backoff.", li: ["Queue consumers", "Idempotent handlers", "DLQ on failure"], pods: 1 },
-    db: { x: 280, y: 505, code: "DB", t: "Database", s: "mongo · postgres", role: "DATA LAYER", d: "Primary datastore with automated backups, point-in-time recovery and connection pooling. It sits in private subnets only.", li: ["Daily snapshots + PITR", "Private subnet", "Connection pooling"] },
-    cache: { x: 460, y: 505, code: "KV", t: "Redis", s: "cache · sessions", role: "CACHE LAYER", d: "In-memory cache for hot reads and rate-limit counters. It takes most of the read load off the database.", li: ["TTL-based invalidation", "Rate-limit buckets", "~90% hit ratio target"] },
-    store: { x: 640, y: 505, code: "OBJ", t: "Object Store", s: "s3 · media", role: "STORAGE", d: "Resumes, images and backups in object storage with lifecycle rules that move cold data to cheaper tiers.", li: ["Lifecycle → cold tier", "Versioning", "Served via CDN"] },
-    ci: { x: 70, y: 198, code: "CI", t: "CI/CD", s: "github actions", role: "DELIVERY", d: "Every push is tested, scanned and built into an image, then rolled out to the cluster with automatic rollback.", li: ["Lint → Test → Scan → Build", "Trivy image scan", "Auto rollback"] },
-    reg: { x: 70, y: 290, code: "REG", t: "Registry", s: "container images", role: "ARTIFACTS", d: "Versioned, scanned container images tagged by commit SHA. Lifecycle rules prune old tags to keep storage cheap.", li: ["Immutable SHA tags", "Scan on push", "Tag retention policy"] },
-    obs: { x: 790, y: 198, code: "OBS", t: "Observability", s: "prom · grafana", role: "MONITORING", d: "Prometheus scrapes every component, Grafana shows it, Loki collects logs, and Alertmanager pages on SLO burn.", li: ["Golden-signal dashboards", "Log aggregation", "SLO alerting"] },
+    users: { x: 450, y: 38, icon: "users", tier: "edge", t: "Users", s: "web · mobile", role: "CLIENTS", d: "Students, recruiters and institutions reaching Saarthix from browsers and phones around the world.", li: ["HTTPS only (HSTS)", "Geo-distributed traffic", "Burst-heavy usage patterns"] },
+    cdn: { x: 450, y: 118, icon: "globe", tier: "edge", t: "Edge / CDN", s: "DNS · WAF · TLS", role: "EDGE LAYER", d: "Cloudflare/CDN edge in front of everything. It terminates TLS, caches static assets, blocks bad bots and absorbs DDoS.", li: ["WAF + bot rules", "Edge caching → less origin egress", "Auto TLS certificates", "DNS failover"] },
+    lb: { x: 450, y: 198, icon: "scale", tier: "edge", t: "Load Balancer", s: "nginx · L7", role: "TRAFFIC DISTRIBUTION", d: "Layer-7 load balancer with active health checks. Traffic only reaches healthy upstreams, and nodes drain cleanly during deploys.", li: ["least_conn balancing", "Active health checks", "Gzip / Brotli", "Zero-downtime reloads"] },
+    gw: { x: 320, y: 290, icon: "gate", tier: "app", t: "API Gateway", s: "kong · routing", role: "SINGLE FRONT DOOR", d: "All API traffic goes through the gateway: routing to services, JWT validation, per-client rate limits, CORS and structured access logs.", li: ["Path-based routing", "Rate limiting / quotas", "Auth plugins (JWT)", "Request tracing IDs"] },
+    web: { x: 600, y: 290, icon: "code", tier: "app", t: "Frontend", s: "react · nginx", role: "STATIC SPA", d: "React SPA built in CI and served by a small Nginx container. Assets are fingerprinted, so the CDN can cache them indefinitely.", li: ["Immutable asset caching", "SPA fallback routing", "~20MB image"] },
+    s1: { x: 210, y: 390, icon: "box", tier: "app", t: "auth-svc", s: "spring boot", role: "MICROSERVICE", d: "Handles authentication, sessions and OAuth. Runs stateless with tokens, so it scales horizontally.", li: ["HPA on CPU", "Readiness probes", "Secrets from Vault"], pods: 2 },
+    s2: { x: 355, y: 390, icon: "box", tier: "app", t: "jobs-svc", s: "spring boot", role: "MICROSERVICE", d: "Job listings, search and recommendations. It's the busiest service, so it gets the most aggressive autoscaling.", li: ["HPA 2 → 10 pods", "Redis read-through cache", "Rolling updates"], pods: 3 },
+    s3: { x: 500, y: 390, icon: "box", tier: "app", t: "resume-svc", s: "spring boot", role: "MICROSERVICE", d: "Resume builder and file processing. Uploads go straight to object storage with pre-signed URLs.", li: ["Pre-signed uploads", "Async processing", "Memory-tuned JVM"], pods: 2 },
+    s4: { x: 645, y: 390, icon: "box", tier: "app", t: "notify-svc", s: "events · mail", role: "MICROSERVICE", d: "Email and notification fan-out from an event queue. Retries use exponential backoff.", li: ["Queue consumers", "Idempotent handlers", "DLQ on failure"], pods: 1 },
+    db: { x: 280, y: 505, icon: "db", tier: "data", t: "Database", s: "mongo · postgres", role: "DATA LAYER", d: "Primary datastore with automated backups, point-in-time recovery and connection pooling. It sits in private subnets only.", li: ["Daily snapshots + PITR", "Private subnet", "Connection pooling"] },
+    cache: { x: 460, y: 505, icon: "bolt", tier: "data", t: "Redis", s: "cache · sessions", role: "CACHE LAYER", d: "In-memory cache for hot reads and rate-limit counters. It takes most of the read load off the database.", li: ["TTL-based invalidation", "Rate-limit buckets", "~90% hit ratio target"] },
+    store: { x: 640, y: 505, icon: "archive", tier: "data", t: "Object Store", s: "s3 · media", role: "STORAGE", d: "Resumes, images and backups in object storage with lifecycle rules that move cold data to cheaper tiers.", li: ["Lifecycle → cold tier", "Versioning", "Served via CDN"] },
+    ci: { x: 70, y: 198, icon: "cog", tier: "ops", t: "CI/CD", s: "github actions", role: "DELIVERY", d: "Every push is tested, scanned and built into an image, then rolled out to the cluster with automatic rollback.", li: ["Lint → Test → Scan → Build", "Trivy image scan", "Auto rollback"] },
+    reg: { x: 70, y: 290, icon: "layers", tier: "ops", t: "Registry", s: "container images", role: "ARTIFACTS", d: "Versioned, scanned container images tagged by commit SHA. Lifecycle rules prune old tags to keep storage cheap.", li: ["Immutable SHA tags", "Scan on push", "Tag retention policy"] },
+    obs: { x: 790, y: 198, icon: "pulse", tier: "ops", t: "Observability", s: "prom · grafana", role: "MONITORING", d: "Prometheus scrapes every component, Grafana shows it, Loki collects logs, and Alertmanager pages on SLO burn.", li: ["Golden-signal dashboards", "Log aggregation", "SLO alerting"] },
   };
   const links = [["users", "cdn"], ["cdn", "lb"], ["lb", "gw"], ["lb", "web"], ["gw", "s1"], ["gw", "s2"], ["gw", "s3"], ["gw", "s4"], ["s1", "db"], ["s2", "db"], ["s2", "cache"], ["s3", "store"], ["s3", "db"], ["s4", "cache"], ["ci", "reg"], ["reg", "s1"]];
   const mon = [["obs", "web"], ["obs", "s4"], ["obs", "lb"], ["obs", "cdn"]];
-  const W = 118, H = 50;
+  const W = 136, H = 50;
 
   const el = (tag, attrs, parent = svg) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); parent.appendChild(e); return e; };
   svg.innerHTML = `<defs>
     <filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
   </defs>`;
   // zones
-  el("rect", { x: 140, y: 238, width: 580, height: 205, rx: 14, class: "zone" });
-  el("text", { x: 146, y: 233, class: "zone-lbl" }).textContent = "K8S CLUSTER · PRIVATE";
-  el("rect", { x: 200, y: 456, width: 520, height: 84, rx: 14, class: "zone" });
-  el("text", { x: 206, y: 451, class: "zone-lbl" }).textContent = "DATA TIER";
-  el("rect", { x: 6, y: 152, width: 128, height: 180, rx: 14, class: "zone" });
-  el("text", { x: 10, y: 146, class: "zone-lbl" }).textContent = "DELIVERY";
+  el("rect", { x: 140, y: 230, width: 580, height: 215, rx: 18, class: "zone" });
+  el("text", { x: 156, y: 250, class: "zone-lbl" }).textContent = "PRIVATE NETWORK · CONTAINERS";
+  el("rect", { x: 200, y: 452, width: 520, height: 90, rx: 18, class: "zone" });
+  el("text", { x: 216, y: 470, class: "zone-lbl" }).textContent = "DATA";
+  el("rect", { x: 6, y: 140, width: 128, height: 194, rx: 18, class: "zone" });
+  el("text", { x: 20, y: 158, class: "zone-lbl" }).textContent = "DELIVERY";
 
   const linkG = el("g", {});
-  const path = (a, b) => `M${N[a].x},${N[a].y} L${N[b].x},${N[b].y}`;
-  links.forEach(([a, b]) => el("path", { d: path(a, b), class: "link flow" }, linkG));
-  mon.forEach(([a, b]) => el("path", { d: path(a, b), class: "link", "stroke-dasharray": "2 5" }, linkG));
+  // cubic S-curve between two nodes (vertical tangents) — used for both the drawn links and the moving packets
+  const ctrl = (a, b) => { const my = (a.y + b.y) / 2; return [a.x, a.y, a.x, my, b.x, my, b.x, b.y]; };
+  const path = (a, b) => { const [x0, y0, x1, y1, x2, y2, x3, y3] = ctrl(N[a], N[b]); return `M${x0},${y0} C${x1},${y1} ${x2},${y2} ${x3},${y3}`; };
+  const curvePt = (a, b, t) => { const [x0, y0, x1, y1, x2, y2, x3, y3] = ctrl(a, b), u = 1 - t;
+    return [u*u*u*x0 + 3*u*u*t*x1 + 3*u*t*t*x2 + t*t*t*x3, u*u*u*y0 + 3*u*u*t*y1 + 3*u*t*t*y2 + t*t*t*y3]; };
+  links.forEach(([a, b]) => el("path", { d: path(a, b), class: "link" }, linkG));
+  mon.forEach(([a, b]) => el("path", { d: path(a, b), class: "link mon" }, linkG));
   const pktG = el("g", {});
   const nodeG = el("g", {});
 
   for (const k in N) {
     const n = N[k];
     const g = el("g", { class: "node", transform: `translate(${n.x - W / 2},${n.y - H / 2})` }, nodeG);
-    el("rect", { class: "box", width: W, height: H, rx: 10 }, g);
-    el("rect", { class: "badge", x: 8, y: 13, width: 26, height: 24, rx: 6 }, g);
-    el("text", { class: "ic", x: 21, y: 28.5 }, g).textContent = n.code;
-    const t1 = el("text", { x: 72, y: 22 }, g); t1.textContent = n.t;
-    const t2 = el("text", { x: 72, y: 36, class: "sub" }, g); t2.textContent = n.s; n.subEl = t2;
+    g.classList.add("t-" + n.tier);
+    el("rect", { class: "box", width: W, height: H, rx: 12 }, g);
+    el("rect", { class: "tile", x: 9, y: 11, width: 28, height: 28, rx: 8 }, g);
+    el("use", { href: "#i-" + n.icon, x: 15, y: 17, width: 16, height: 16, class: "glyph" }, g);
+    const t1 = el("text", { x: 46, y: 22.5, class: "ttl" }, g); t1.textContent = n.t;
+    const t2 = el("text", { x: 46, y: 36, class: "sub" }, g); t2.textContent = n.s; n.subEl = t2;
     n.g = g;
     el("title", {}, g).textContent = `${n.t} · ${n.role}
 ${n.d}`;
@@ -293,8 +298,8 @@ ${n.d}`;
   function drawPods(n) {
     n.podG.innerHTML = "";
     n.podState.forEach((s, i) => {
-      const col = { ok: "#3dffa8", dead: "#ff4d6d", new: "#ffb547", canary: "#ff3ea5" }[s] || "#9d5cff";
-      el("rect", { x: i * 12, y: 0, width: 9, height: 9, rx: 2, fill: col, opacity: s === "dead" ? .6 : 1 }, n.podG);
+      const col = { ok: "#4ade80", dead: "#f87171", new: "#fbbf24", canary: "#f472b6" }[s] || "#a78bfa";
+      el("rect", { x: i * 11, y: 0, width: 8, height: 8, rx: 2.5, fill: col, opacity: s === "dead" ? .55 : .95 }, n.podG);
     });
   }
   const svcs = ["s1", "s2", "s3", "s4"];
@@ -334,28 +339,28 @@ ${n.d}`;
     return pick(ok.length ? ok : svcs);
   }
   function addPacket(route, color, speed, r = 3.4) {
-    const c = el("circle", { r, fill: color }, pktG);
+    const c = el("circle", { r: r * .8, fill: color, class: "pkt" }, pktG);
     packets.push({ route, seg: 0, t: 0, c, speed });
   }
   function spawn() {
     const route = ["users", "cdn"];
-    let color = "#22e4ff";
-    if (Math.random() < .3) { route.push("users"); color = "#3dffa8"; } // edge cache hit
+    let color = "#67e3ff";
+    if (Math.random() < .3) { route.push("users"); color = "#4ade80"; } // edge cache hit
     else {
       route.push("lb");
       if (Math.random() < .3) route.push("web");
       else {
         const s = Math.random() < .45 ? "s2" : healthySvc();
         route.push("gw", s);
-        if (!N[s].podState.some(alive)) color = "#ff4d6d";
+        if (!N[s].podState.some(alive)) color = "#f87171";
         else if (s === "s2") route.push(!sim.cacheCold && Math.random() < .6 ? "cache" : "db");
         else if (s === "s3") route.push(Math.random() < .5 ? "store" : "db");
         else if (s === "s1") route.push("db");
         else route.push("cache");
-        if (sim.dbDown && route[route.length - 1] === "db") color = "#ffb547"; // queued / retrying
+        if (sim.dbDown && route[route.length - 1] === "db") color = "#fbbf24"; // queued / retrying
       }
     }
-    if (Math.random() < sim.errBoost) color = "#ff4d6d";
+    if (Math.random() < sim.errBoost) color = "#f87171";
     addPacket(route, color, rand(.018, .03) * (1 + sim.load * .15));
   }
   let acc = 0, accBad = 0;
@@ -364,7 +369,7 @@ ${n.d}`;
     while (acc > 1) { spawn(); acc--; }
     if (sim.ddos) {
       accBad += dt * .22;
-      while (accBad > 1) { addPacket(["users", "cdn"], "#ff4d6d", rand(.035, .06), 2.6); accBad--; }
+      while (accBad > 1) { addPacket(["users", "cdn"], "#f87171", rand(.035, .06), 2.2); accBad--; }
     }
     for (let i = packets.length - 1; i >= 0; i--) {
       const p = packets[i];
@@ -372,8 +377,9 @@ ${n.d}`;
       if (p.t >= 1) { p.t = 0; p.seg++; }
       if (p.seg >= p.route.length - 1) { p.c.remove(); packets.splice(i, 1); continue; }
       const a = N[p.route[p.seg]], b = N[p.route[p.seg + 1]];
-      p.c.setAttribute("cx", a.x + (b.x - a.x) * p.t);
-      p.c.setAttribute("cy", a.y + (b.y - a.y) * p.t);
+      const [px, py] = curvePt(a, b, p.t);
+      p.c.setAttribute("cx", px);
+      p.c.setAttribute("cy", py);
     }
   });
 
@@ -382,11 +388,12 @@ ${n.d}`;
   const spark = $("#spark"), sctx = spark.getContext("2d");
   let sw = 0, sh = 0;
   new ResizeObserver(() => { sw = spark.width = spark.clientWidth; sh = spark.height = spark.clientHeight; }).observe(spark);
-  const tbody = $("#svc-table tbody");
+  const tbody = $("#svc-list");
   const rows = {};
   svcs.forEach(k => {
-    const tr = document.createElement("tr");
-    tr.innerHTML = `<td class="sv-n">${N[k].t}</td><td class="sv-p"></td><td class="sv-c"></td><td><span class="sv-s"></span></td>`;
+    const tr = document.createElement("button");
+    tr.type = "button"; tr.className = "svc-chip";
+    tr.innerHTML = `<span class="sv-n">${N[k].t}</span><span class="sv-p"></span><span class="sv-c"></span><span class="sv-s"></span>`;
     tr.onclick = () => { select(k); describe(k); };
     tbody.appendChild(tr);
     rows[k] = { tr, p: $(".sv-p", tr), c: $(".sv-c", tr), s: $(".sv-s", tr) };
@@ -437,13 +444,13 @@ ${n.d}`;
     const w = sw, h = sh;
     sctx.clearRect(0, 0, w, h);
     const mx = Math.max(300, ...hist);
-    const g = sctx.createLinearGradient(0, 0, 0, h); g.addColorStop(0, "rgba(34,228,255,.45)"); g.addColorStop(1, "rgba(34,228,255,0)");
+    const g = sctx.createLinearGradient(0, 0, 0, h); g.addColorStop(0, "rgba(103,227,255,.28)"); g.addColorStop(1, "rgba(103,227,255,0)");
     sctx.beginPath(); sctx.moveTo(0, h);
     hist.forEach((v, i) => sctx.lineTo(i / (hist.length - 1) * w, h - v / mx * h * .9));
     sctx.lineTo(w, h); sctx.fillStyle = g; sctx.fill();
     sctx.beginPath();
     hist.forEach((v, i) => sctx[i ? "lineTo" : "moveTo"](i / (hist.length - 1) * w, h - v / mx * h * .9));
-    sctx.strokeStyle = "#22e4ff"; sctx.lineWidth = 2; sctx.stroke();
+    sctx.strokeStyle = "#67e3ff"; sctx.lineWidth = 1.5; sctx.stroke();
   }, 500);
 
   // ambient logs (paused while an event is narrating)
@@ -480,29 +487,29 @@ ${n.d}`;
 
   // ---- events ----
   const EVENTS = [
-    ["TRAFFIC", "⚡ traffic spike", "", async () => {
+    ["TRAFFIC", "traffic spike", "", async () => {
       sim.load = 7; banner("TRAFFIC SPIKE · 6.8× BASELINE", "w"); select("lb");
-      log("⚡ traffic spike detected: 6.8x baseline", "w");
+      log("traffic spike detected: 6.8x baseline", "w");
       await step(900, "HPA: jobs-svc cpu 87% > 70% target → scaling", "w");
       for (let i = 0; i < 4; i++) { await sleep(450); setPods("s2", p => [...p, "new"]); log(`k8s: jobs-svc-${podId()} ContainerCreating`); }
       setPods("s1", p => [...p, "new"]);
       await sleep(1100);
       ["s1", "s2"].forEach(k => setPods(k, p => p.map(s => s === "new" ? "ok" : s)));
-      log("HPA: scaled jobs-svc 3 → 7, auth-svc 2 → 3 ✔", "g"); banner("AUTOSCALED · LATENCY STABLE", "g");
+      log("HPA: scaled jobs-svc 3 → 7, auth-svc 2 → 3", "g"); banner("AUTOSCALED · LATENCY STABLE", "g");
       await sleep(4500);
       setPods("s2", p => p.slice(0, 3)); setPods("s1", p => p.slice(0, 2));
-      log("HPA: load normalised, scaled back down to save cost 💰", "g");
+      log("HPA: load normalised, scaled back down to save cost ", "g");
     }],
     ["TRAFFIC", "🛡 DDoS attack", "alt", async () => {
       sim.ddos = 1; select("cdn"); banner("DDOS · 48K REQ/S FROM 1,204 IPs", "e");
-      log("☠ L7 flood: 48k req/s from 1,204 IPs on /api/jobs", "e");
+      log("L7 flood: 48k req/s from 1,204 IPs on /api/jobs", "e");
       await step(1200, "waf: rate rule triggered (>200 req/10s per IP)", "w");
       mark("cdn", "shield"); shock("cdn");
       await step(900, "waf: bot score < 10 → challenge, known bad ASNs → block", "w");
       banner("WAF SHIELD UP · ORIGIN UNTOUCHED", "g");
       for (let i = 0; i < 3; i++) { await sleep(1100); shock("cdn"); log(`waf: blocked ${(12 + i * 15).toFixed(0)}k requests at the edge`, "g"); }
       sim.ddos = 0;
-      await step(800, "✔ attack absorbed at the edge, origin load unchanged", "g");
+      await step(800, "attack absorbed at the edge, origin load unchanged", "g");
       mark("cdn", "shield", false);
     }],
     ["TRAFFIC", "🌙 off-peak scale-down", "", async () => {
@@ -511,25 +518,25 @@ ${n.d}`;
       sim.load = .35;
       for (const k of ["s2", "s1", "s3"]) { await sleep(500); setPods(k, p => p.slice(0, 1)); log(`HPA: ${N[k].t} → 1 replica`); }
       await step(700, "karpenter: consolidating nodes 4 → 2 (spot)", "");
-      banner("💰 ~40% LESS COMPUTE TONIGHT", "g");
-      await step(2500, "☀ morning ramp-up: restoring baseline replicas", "w");
+      banner(" ~40% LESS COMPUTE TONIGHT", "g");
+      await step(2500, "morning ramp-up: restoring baseline replicas", "w");
       setPods("s1", () => ["new", "new"]); setPods("s2", () => ["new", "new", "new"]); setPods("s3", () => ["new", "new"]);
       await sleep(1000);
       svcs.forEach(k => setPods(k, p => p.map(() => "ok")));
-      log("✔ back to baseline before traffic arrived", "g");
+      log("back to baseline before traffic arrived", "g");
     }],
-    ["FAILURES", "☠ kill a pod", "alt", async () => {
+    ["FAILURES", "kill a pod", "alt", async () => {
       const k = pick(["s1", "s2", "s3"]), n = N[k], i = Math.floor(Math.random() * n.podState.length);
       n.podState[i] = "dead"; drawPods(n); mark(k, "down");
       sim.errBoost = .08; select(k); banner(`POD OOMKILLED · ${n.t.toUpperCase()}`, "e");
-      log(`☠ chaos: killed pod ${n.t}-${podId()} (OOMKilled)`, "e");
+      log(`chaos: killed pod ${n.t}-${podId()} (OOMKilled)`, "e");
       await step(700, "readiness probe failed → removed from endpoints", "w");
       mark(k, "down", false); sim.errBoost = .01;
       await sleep(900);
       n.podState[i] = "new"; drawPods(n); log(`ReplicaSet: recreating ${n.t} pod…`);
       await sleep(1300);
       n.podState[i] = "ok"; drawPods(n);
-      log(`✔ ${n.t} self-healed in 3.0s, zero user impact`, "g"); banner("SELF-HEALED · 3.0s", "g");
+      log(`${n.t} self-healed in 3.0s, zero user impact`, "g"); banner("SELF-HEALED · 3.0s", "g");
     }],
     ["FAILURES", "💥 node failure", "alt", async () => {
       select("s2"); banner("NODE NOTREADY · SPOT RECLAIMED", "e");
@@ -545,7 +552,7 @@ ${n.d}`;
       log("node ip-10-0-3-42 Ready → rescheduling pods");
       await sleep(1300);
       svcs.forEach(k => { setPods(k, p => p.map(() => "ok")); mark(k, "alert", false); });
-      log("✔ workloads rescheduled, PodDisruptionBudget held", "g"); banner("CAPACITY RESTORED", "g");
+      log("workloads rescheduled, PodDisruptionBudget held", "g"); banner("CAPACITY RESTORED", "g");
     }],
     ["FAILURES", "🗄 DB failover", "alt", async () => {
       select("db"); sim.dbDown = true; mark("db", "down"); sim.latBoost = 60;
@@ -556,11 +563,11 @@ ${n.d}`;
       setSub("db", "replica → primary");
       await sleep(1200);
       sim.dbDown = false; mark("db", "down", false); mark("db", "alert");
-      log("✔ failover complete in 3.8s, connections re-pooled", "g"); banner("NEW PRIMARY IN AZ-B · 3.8s", "g");
+      log("failover complete in 3.8s, connections re-pooled", "g"); banner("NEW PRIMARY IN AZ-B · 3.8s", "g");
       await step(1600, "rebuilding replica in AZ-a from latest snapshot");
       await sleep(1400);
       mark("db", "alert", false); setSub("db", N.db.s);
-      log("✔ replication healthy, lag 0.2s", "g");
+      log("replication healthy, lag 0.2s", "g");
     }],
     ["FAILURES", "🧊 cache flush", "warn", async () => {
       select("cache"); sim.cacheCold = true; mark("cache", "alert"); sim.latBoost = 70;
@@ -570,7 +577,7 @@ ${n.d}`;
       await step(1000, "db: read IOPS 3.4x, pgbouncer absorbing load", "");
       for (const r of [.31, .62, .84]) { await sleep(900); sim.latBoost = 70 * (1 - r); log(`redis: warming… hit ratio ${r.toFixed(2)}`); }
       sim.cacheCold = false; mark("cache", "alert", false);
-      log("✔ cache warm (0.91), latency back to baseline", "g"); banner("CACHE WARM · P95 NORMAL", "g");
+      log("cache warm (0.91), latency back to baseline", "g"); banner("CACHE WARM · P95 NORMAL", "g");
     }],
     ["RELEASES", "⟳ rolling deploy", "", async () => {
       const v = sha(); select("ci"); banner(`ROLLING DEPLOY · ${v}`, "");
@@ -580,20 +587,20 @@ ${n.d}`;
         for (let i = 0; i < n.podState.length; i++) { n.podState[i] = "deploy"; drawPods(n); await sleep(300); n.podState[i] = "ok"; drawPods(n); }
         n.ver = v; log(`rollout: ${n.t} → ${v} (maxUnavailable=0)`);
       }
-      log("✔ rolling deploy complete, 0 dropped requests", "g"); banner("DEPLOYED · 0 DROPPED REQUESTS", "g");
+      log("rolling deploy complete, 0 dropped requests", "g"); banner("DEPLOYED · 0 DROPPED REQUESTS", "g");
     }],
     ["RELEASES", "🐤 canary release", "", async () => {
       const v = sha(); select("s2"); banner(`CANARY · JOBS-SVC ${v} · 10%`, "");
       setPods("s2", p => [...p, "canary"]);
       log(`argo-rollouts: canary jobs-svc:${v} → 10% traffic`);
-      await step(1500, "analysis: error 0.02% · p95 39ms ✔", "g");
+      await step(1500, "analysis: error 0.02% · p95 39ms", "g");
       banner("CANARY · 50%", ""); await step(800, "argo-rollouts: promote → 50%");
-      await step(1400, "analysis: error 0.01% · p95 38ms ✔", "g");
+      await step(1400, "analysis: error 0.01% · p95 38ms", "g");
       banner("CANARY · 100%", ""); await step(600, "argo-rollouts: promote → 100%");
       for (let i = 0; i < 3; i++) { await sleep(350); setPods("s2", p => p.map((s, j) => j === i ? "canary" : s)); }
       await sleep(600);
       setPods("s2", p => p.slice(0, 3).map(() => "ok"));
-      N.s2.ver = v; log(`✔ jobs-svc ${v} fully promoted, old ReplicaSet scaled to 0`, "g"); banner("CANARY PROMOTED", "g");
+      N.s2.ver = v; log(`jobs-svc ${v} fully promoted, old ReplicaSet scaled to 0`, "g"); banner("CANARY PROMOTED", "g");
     }],
     ["RELEASES", "↩ bad deploy → rollback", "alt", async () => {
       const v = sha(); select("s3"); banner(`DEPLOY RESUME-SVC ${v}`, "");
@@ -602,21 +609,21 @@ ${n.d}`;
       await sleep(500);
       sim.errBoost = .18; mark("s3", "down"); mark("obs", "alert");
       banner("5XX SPIKE · ERROR BUDGET BURNING", "e");
-      log("alertmanager: HTTP 5xx 4.1% > 2% on resume-svc 🔥", "e");
+      log("alertmanager: HTTP 5xx 4.1% > 2% on resume-svc ", "e");
       await step(1100, "smoke check failed: POST /api/resume → 500", "e");
       select("obs");
       await step(800, "auto-rollback: helm rollback resume-svc 127", "w");
       for (let i = 0; i < N.s3.podState.length; i++) { await sleep(350); setPods("s3", p => p.map((s, j) => j === i ? "ok" : s)); }
       N.s3.ver = prev; sim.errBoost = .01; mark("s3", "down", false); mark("obs", "alert", false);
-      log("✔ rolled back in 41s, bad image quarantined", "g"); banner("ROLLED BACK · BUDGET PRESERVED", "g");
+      log("rolled back in 41s, bad image quarantined", "g"); banner("ROLLED BACK · BUDGET PRESERVED", "g");
     }],
   ];
 
   const DESC = {
-    "⚡ traffic spike": "6.8× load hits the API → autoscaling",
+    "traffic spike": "6.8× load hits the API → autoscaling",
     "🛡 DDoS attack": "L7 flood from 1,200 IPs → WAF at the edge",
     "🌙 off-peak scale-down": "Night window → shrink to save cost",
-    "☠ kill a pod": "OOMKill a random pod → self-healing",
+    "kill a pod": "OOMKill a random pod → self-healing",
     "💥 node failure": "Spot node reclaimed → reschedule pods",
     "🗄 DB failover": "Primary DB dies → promote replica",
     "🧊 cache flush": "Redis emptied → miss storm → re-warm",
@@ -624,44 +631,74 @@ ${n.d}`;
     "🐤 canary release": "10% → 50% → 100% with health analysis",
     "↩ bad deploy → rollback": "Broken release → alert → auto-rollback",
   };
-  const bar = $("#arch-events"), split = $("#arch-split"), statusBox = $("#ctrl-status"), status = $("span", statusBox);
+  // plain-English: what the visitor should watch for in each scenario
+  const STORY = {
+    "traffic spike": ["Traffic jumps to about 7× normal.", "Watch the jobs service add servers on its own (autoscaling), keep latency steady, then scale back down to save money."],
+    "DDoS attack": ["A flood of fake requests hits the site.", "Watch the red traffic get stopped at the Cloudflare edge, so the servers behind it never notice."],
+    "off-peak scale-down": ["It's the middle of the night and traffic is low.", "Watch services shrink to one server each to cut cost, then grow back before the morning rush."],
+    "kill a pod": ["One running server crashes.", "Watch it get pulled out of rotation and replaced automatically within seconds, with no impact on users."],
+    "node failure": ["A whole machine disappears.", "Watch the affected servers restart on a fresh machine while the remaining ones keep serving."],
+    "DB failover": ["The main database goes down.", "Watch requests briefly wait, then a standby copy in another zone takes over as the new main database."],
+    "cache flush": ["The cache is emptied.", "Watch more requests fall through to the database and latency rise, then recover as the cache warms back up."],
+    "rolling deploy": ["A new version is released.", "Watch every service update one server at a time, so the site never goes down."],
+    "canary release": ["A risky change goes to a few users first.", "Watch it serve 10%, then 50%, then 100% of traffic, checking health at each step."],
+    "bad deploy → rollback": ["A release with a bug goes out.", "Watch errors spike, an alert fire, and the system roll back to the previous version automatically."],
+  };
+  const ICON = { "traffic spike": "pulse", "DDoS attack": "shield", "off-peak scale-down": "moon", "kill a pod": "x", "node failure": "layers",
+    "DB failover": "db", "cache flush": "bolt", "rolling deploy": "rocket", "canary release": "git", "bad deploy → rollback": "undo" };
+  const bar = $("#arch-events"), split = $("#arch-split"), statusBox = $("#ctrl-status"), status = $("span", statusBox), story = $("#hx-story");
   const groups = {};
   const buttons = [];
   const bare = label => label.replace(/^\S+\s/, "");
+  const tabs = document.createElement("div"); tabs.className = "sc-tabs"; tabs.setAttribute("role", "tablist");
+  bar.appendChild(tabs);
+  const showTab = grp => { Object.entries(groups).forEach(([g, list]) => { const on = g === grp; list.hidden = !on; list.previousTab.classList.toggle("on", on); list.previousTab.setAttribute("aria-selected", on); }); };
   EVENTS.forEach(([grp, label, cls, fn]) => {
     if (!groups[grp]) {
-      const g = document.createElement("div");
-      g.className = "ev-group";
-      g.innerHTML = `<div class="ev-lbl">${grp}</div><div class="ev-btns"></div>`;
-      bar.appendChild(g);
-      groups[grp] = $(".ev-btns", g);
+      const t = document.createElement("button");
+      t.type = "button"; t.className = "sc-tab"; t.setAttribute("role", "tab");
+      t.textContent = grp.charAt(0) + grp.slice(1).toLowerCase();
+      tabs.appendChild(t);
+      const list = document.createElement("div");
+      list.className = "sc-list"; list.setAttribute("role", "tabpanel"); list.previousTab = t;
+      bar.appendChild(list);
+      groups[grp] = list;
+      t.onclick = () => showTab(grp);
     }
+    const name = bare(label);
     const b = document.createElement("button");
     b.type = "button";
     b.className = `ev-item ${cls}`;
-    b.dataset.cursor = bare(label);
-    b.title = DESC[label] || "";
-    b.innerHTML = `<span class="ev-t">${bare(label)}</span><svg class="ev-go"><use href="#i-arrow"/></svg>`;
+    b.dataset.cursor = name;
+    b.innerHTML = `<span class="ev-ic"><svg><use href="#i-${ICON[name] || "pulse"}"/></svg></span><span class="ev-txt"><span class="ev-t">${name.charAt(0).toUpperCase() + name.slice(1)}</span><span class="ev-d">${(STORY[name] || [""])[0]}</span></span><svg class="ev-go"><use href="#i-arrow"/></svg>`;
     b.onclick = async () => {
       if (busy) return;
       busy = true;
       buttons.forEach(x => x.disabled = x !== b);
       b.classList.add("running"); split.classList.add("is-running");
-      statusBox.className = "ctrl-status run"; status.textContent = `running · ${bare(label)}`;
-      log(`$ hariom-ops inject --event="${bare(label)}"`, "cmd");
+      statusBox.className = "ctrl-status run"; status.textContent = "Running";
+      const st = STORY[name] || ["", ""];
+      story.innerHTML = `<b>${name.charAt(0).toUpperCase() + name.slice(1)}.</b> ${st[0]} <span>${st[1]}</span>`;
+      story.classList.add("on");
+      log(`Scenario started: ${name}`, "cmd");
       // stacked layout: bring the response into view
       if (innerWidth <= 1000) $(".arch-canvas").scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "start" });
       try { await fn(); } finally {
         hideBanner();
         b.classList.remove("running"); split.classList.remove("is-running");
         b.classList.add("done"); setTimeout(() => b.classList.remove("done"), 2500);
-        statusBox.className = "ctrl-status ok"; status.textContent = `resolved · ${bare(label)} · system healthy`;
+        statusBox.className = "ctrl-status ok"; status.textContent = "Recovered · healthy";
+        log("System healthy again. No manual action was needed.", "g");
         buttons.forEach(x => x.disabled = false);
         busy = false;
       }
     };
     groups[grp].appendChild(b); buttons.push(b);
   });
+  showTab(EVENTS[0][0]);
+  // phones: the map scrolls sideways, so start centred on the main request path
+  const cv = $(".hx-map .arch-canvas");
+  requestAnimationFrame(() => { if (cv && cv.scrollWidth > cv.clientWidth) cv.scrollLeft = (cv.scrollWidth - cv.clientWidth) / 2; });
 }, "0px 0px 300px 0px");
 
 /* ---------------- CI/CD pipeline ---------------- */

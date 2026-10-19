@@ -87,7 +87,7 @@
 
 <link rel="preload" href="/fonts/space-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/styles.css?v=20261019c">
+<link rel="stylesheet" href="/styles.css?v=20261019d">
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -112,6 +112,11 @@
   <symbol id="i-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v17M8 20h8M5 7h14"/><path d="M5 7l-2.5 6a2.5 2.5 0 0 0 5 0zM19 7l-2.5 6a2.5 2.5 0 0 0 5 0z"/></symbol>
   <symbol id="i-gate" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M12 3v18M9.5 12h.01M14.5 12h.01"/></symbol>
   <symbol id="i-db" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5.5" rx="8" ry="2.5"/><path d="M4 5.5v13c0 1.4 3.6 2.5 8 2.5s8-1.1 8-2.5v-13"/><path d="M4 12c0 1.4 3.6 2.5 8 2.5s8-1.1 8-2.5"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><path d="M16 4.6a3.5 3.5 0 0 1 0 6.8M18 14.8c2 .7 3.2 2.5 3.6 5.2"/></symbol>
+  <symbol id="i-bolt" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2.5L4.5 13.5H11l-1 8 8.5-11H12z"/></symbol>
+  <symbol id="i-archive" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="5" rx="1.5"/><path d="M5 9v9.5A1.5 1.5 0 0 0 6.5 20h11a1.5 1.5 0 0 0 1.5-1.5V9M10 13h4"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></symbol>
+  <symbol id="i-undo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14L4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/></symbol>
   <symbol id="i-ext" viewBox="0 0 16 16"><path d="M9 2h5v5M14 2L7 9M12 9.5V14H2V4h4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
 </svg>
 
@@ -197,53 +202,51 @@
         <div class="dash-tagrow"><div class="sec-tag">01 · kubectl get infra -o wide</div><a class="pill-link" href="/saarthix-case-study"><span aria-hidden="true"><svg><use href="#i-doc"/></svg></span> How I built this: read the case study <i aria-hidden="true">→</i></a></div>
         <h2 class="sec-title">Inside the hosting stack.</h2>
       </div>
-      <p class="dash-how"><b class="c-pink">① Pick an action</b> <span>→</span> <b class="c-cyan">② watch the live map</b> <span>→</span> <b class="c-green">③ read the response</b></p>
+      <p class="hx-how">A live model of the platform I run. <b>Pick a scenario</b>, watch the system react, and see how it recovers on its own.</p>
     </div>
 
-    <div class="dash reveal d1" id="arch-split">
-      <!-- ① actions -->
-      <aside class="glass dash-col dash-actions">
-        <div class="panel-head"><span class="ph-t act">① ACTIONS</span></div>
-        <div id="arch-events"></div>
-        <div class="ctrl-status" id="ctrl-status"><i></i><span>idle · pick an action</span></div>
-      </aside>
-
-      <!-- ② live map -->
-      <div class="glass dash-col dash-map neon">
-        <div class="panel-head"><span class="ph-t">② LIVE MAP</span><span class="ph-hint">hover or click any box to see what it does</span><span class="live">LIVE</span></div>
+    <div class="hx reveal d1" id="arch-split">
+      <!-- map -->
+      <div class="glass hx-map">
+        <div class="hx-bar">
+          <div class="hx-title"><span class="hx-live"><i></i>Live</span>Request flow</div>
+          <div class="hx-legend" aria-label="Legend">
+            <span><i class="lg-req"></i>Request</span>
+            <span><i class="lg-cache"></i>Served from cache</span>
+            <span><i class="lg-retry"></i>Retrying</span>
+            <span><i class="lg-err"></i>Error / blocked</span>
+          </div>
+        </div>
         <div class="arch-canvas">
           <div class="arch-banner" id="arch-banner"></div>
-          <svg id="arch-svg" viewBox="0 0 900 560" preserveAspectRatio="xMidYMid meet"></svg>
+          <svg id="arch-svg" viewBox="0 0 900 560" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Hosting architecture: users, Cloudflare edge, load balancer, API gateway, four services, database, cache, object storage, CI/CD and monitoring"></svg>
         </div>
-        <div class="map-legend">
-          <span><i style="background:#22e4ff"></i>request</span>
-          <span><i style="background:#3dffa8"></i>served from cache</span>
-          <span><i style="background:#ffb547"></i>retrying</span>
-          <span><i style="background:#ff4d6d"></i>error / blocked</span>
+        <div class="hx-foot">
+          <span class="hx-foot-l">Services</span>
+          <div class="svc-list" id="svc-list"></div>
+          <span class="hx-hint">Tap any box to learn what it does</span>
         </div>
       </div>
 
-      <!-- ③ response -->
-      <div class="dash-col dash-resp">
-        <div class="glass metrics">
-          <div class="metric"><div class="m-lbl">REQUESTS/S</div><div class="m-val ok" id="m-rps">0</div></div>
-          <div class="metric"><div class="m-lbl">LATENCY</div><div class="m-val ok" id="m-lat">0ms</div></div>
-          <div class="metric"><div class="m-lbl">PODS</div><div class="m-val ok" id="m-pods">0</div></div>
-          <div class="metric"><div class="m-lbl">ERRORS</div><div class="m-val ok" id="m-err">0%</div></div>
-          <canvas class="spark" id="spark"></canvas>
+      <!-- side panel -->
+      <aside class="hx-side">
+        <div class="glass hx-panel hx-scen">
+          <div class="hx-ph">Scenarios</div>
+          <div id="arch-events"></div>
         </div>
-        <div class="glass resp-term">
-          <div class="term-top"><span class="d"></span><span class="d"></span><span class="d"></span><div class="title">③ RESPONSE · live events</div></div>
+        <div class="glass hx-panel hx-act">
+          <div class="hx-ph">Activity <span class="ctrl-status" id="ctrl-status"><i></i><span>Waiting for a scenario</span></span></div>
+          <div class="hx-story" id="hx-story">Pick a scenario above. You'll see the traffic change on the map, and each step of the response will appear here.</div>
+          <div class="hx-kpis">
+            <div><span>Requests/s</span><b class="m-val ok" id="m-rps">0</b></div>
+            <div><span>Latency</span><b class="m-val ok" id="m-lat">0ms</b></div>
+            <div><span>Servers</span><b class="m-val ok" id="m-pods">0</b></div>
+            <div><span>Errors</span><b class="m-val ok" id="m-err">0%</b></div>
+          </div>
+          <canvas class="spark" id="spark"></canvas>
           <div class="arch-log" id="arch-log"></div>
         </div>
-        <div class="glass svc-panel">
-          <div class="panel-head"><span class="ph-t res">▤ MICROSERVICES</span></div>
-          <table class="svc-table" id="svc-table">
-            <thead><tr><th>SERVICE</th><th>PODS</th><th>CPU</th><th>STATUS</th></tr></thead>
-            <tbody></tbody>
-          </table>
-        </div>
-      </div>
+      </aside>
     </div>
   </div>
 </section>
@@ -662,6 +665,6 @@
   Hariom Singh · DevOps Engineer · built &amp; deployed with <span class="hb">♥</span> · <span id="yr"></span> · uptime: <span id="uptime">00:00:00</span>
 </footer>
 
-<script src="/script.js?v=20261019c" defer></script>
+<script src="/script.js?v=20261019d" defer></script>
 </body>
 </html>
