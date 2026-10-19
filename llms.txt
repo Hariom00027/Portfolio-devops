@@ -1,0 +1,25 @@
+# Hariom Singh – DevOps Engineer Portfolio
+
+> Hariom Singh is a DevOps engineer and Project Engineer Lead at Saarthix. He designed, hosts and runs the entire Saarthix platform on his own (Cloudflare at the edge, load balancing, an API gateway, containerised Spring Boot and React services, CI/CD and monitoring), and he is open to DevOps, Cloud, SRE and Platform Engineering roles.
+
+## Pages
+
+- [DevOps Engineer Portfolio](https://hariomsinghdevops.prsoftwares.in/devops-engineer-portfolio): projects grouped by CI/CD, infrastructure as code, containers, cloud and edge, monitoring and security, with an FAQ.
+- [Saarthix DevOps case study](https://hariomsinghdevops.prsoftwares.in/saarthix-case-study): how one engineer hosted a production platform layer by layer on a startup budget.
+- [Interactive portfolio](https://hariomsinghdevops.prsoftwares.in/): live hosting-stack simulation, CI/CD pipeline demo, skills and all projects.
+
+## Projects
+
+- Saarthix platform hosting: production platform run single-handedly (private; documented in the case study).
+- Saarthi-Test: Docker Compose stack of React on Nginx, a Spring Boot (Java 17) API and MongoDB 6 with health-checked start-up. https://github.com/Hariom00027/saarthix-test
+- Portfolio-devops: this site, plain HTML/CSS/JS deployed from GitHub to Cloudflare on every push, with headers and redirects as code. https://github.com/Hariom00027/Portfolio-devops
+- Customer lifetime value model: probabilistic models packaged as a Streamlit app with a Procfile for one-command deployment. https://github.com/Hariom00027/Customer-Lifetime-Value-Prediction
+
+## Skills
+
+AWS, GCP, Cloudflare, Docker, Kubernetes, Helm, Terraform, Ansible, GitHub Actions, GitLab CI/CD, Jenkins, GitOps, Nginx, Kong, load balancing, CDN, Prometheus, Grafana, Loki, Vault, Trivy, PostgreSQL, MongoDB, Redis, Linux, Bash, Python, Go.
+
+## Contact
+
+- LinkedIn: https://www.linkedin.com/in/hariom2003/
+- GitHub: https://github.com/Hariom00027

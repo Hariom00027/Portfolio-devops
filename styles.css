@@ -847,3 +847,26 @@ main > section { scroll-margin-top: 12px; }
 .dash-tagrow .sec-tag { margin: 0; }
 .dash-tagrow .pill-link { padding: 3px 11px; font-size: 11px; }
 #hosting { scroll-margin-top: 0; }
+
+/* ---------- DevOps engineer portfolio page ---------- */
+.cs code { font-family: var(--mono); font-size: .86em; color: var(--green); background: rgba(61,255,168,.07); border: 1px solid rgba(61,255,168,.18); border-radius: 5px; padding: 1px 6px; }
+.dp-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 22px 0 8px; }
+.dp-tile { display: flex; align-items: center; gap: 10px; padding: 14px 16px; border-radius: 12px; font-family: var(--mono); font-size: 13px; color: var(--text); background: var(--panel); border: 1px solid var(--line); transition: border-color .2s, transform .2s, background .2s; }
+.cs .dp-tile { text-decoration: none; }
+.dp-tile span { font-size: 18px; }
+.dp-tile:hover { border-color: rgba(34,228,255,.55); background: rgba(34,228,255,.06); transform: translateY(-2px); }
+.dp h2 { scroll-margin-top: 80px; }
+.dp-code { margin: 6px 0 6px; padding: 16px 18px; border-radius: 12px; background: #02040a; border: 1px solid var(--line); overflow-x: auto; font-family: var(--mono); font-size: 13px; line-height: 1.65; color: #a9b8d6; }
+.dp-code code { all: unset; white-space: pre; }
+.dp-code .k { color: var(--cyan); } .dp-code .v { color: var(--green); }
+.dp-src { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+.dp-faq { display: grid; gap: 10px; }
+.dp-faq details { border: 1px solid var(--line); border-radius: 12px; background: var(--panel); padding: 0 18px; transition: border-color .2s; }
+.dp-faq details[open] { border-color: rgba(34,228,255,.4); }
+.dp-faq summary { cursor: pointer; list-style: none; padding: 15px 0; font-weight: 600; color: var(--text); display: flex; justify-content: space-between; gap: 12px; }
+.dp-faq summary::-webkit-details-marker { display: none; }
+.dp-faq summary::after { content: "+"; font-family: var(--mono); color: var(--cyan); font-size: 18px; line-height: 1; transition: transform .2s; }
+.dp-faq details[open] summary::after { transform: rotate(45deg); }
+.dp-faq details p { margin: 0 0 16px; }
+@media (max-width: 760px) { .dp-grid { grid-template-columns: 1fr 1fr; } }
+.cs nav.dp-grid { position: static; padding: 0; border: 0; background: none; z-index: auto; }
